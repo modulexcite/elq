@@ -1,7 +1,7 @@
 {
   "name": "elq",
   "description": "element query parser",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "homepage": "http://",
   "devDependencies": {
     "chai": "^1.9.1",

@@ -6,41 +6,465 @@
     <style>
       #small {
         width: 25%;
+        box-shadow: 0 0 5px red;
       }
       #medium {
         width: 50%;
+        box-shadow: 0 0 5px orange;
       }
       #large {
+        width: 75%;
+        box-shadow: 0 0 5px green;
+      }
+      #full {
         width: 100%;
+        box-shadow: 0 0 5px blue;
       }
-      a {
-        background-color: #f00;
-        display: block;
-        line-height: 100px;
+
+      body {
+        line-height: 1.5em;
+        font-family: Helvetica, Arial, sans-serif;
+      }
+
+      .groups .label {
+        font-weight: normal;
+        font-size: 1em;
+        margin: 0;
+        padding: .5em;
+        background-color: #ddd;
+        border-bottom: 4px solid #fff;
+        margin-top: 1em;
+      }
+      .groups .panel {
+        background-color: #ddd;
+        padding: .5em;
+        margin: 0;
+        list-style: none;
+      }
+      .groups .tab {
+        display: none;
+      }
+      .groups .button {
+        display: none;
+      }
+
+      .groups:media(min-width: 200px) {
         text-align: center;
+        margin-top: 1em;
+        position: relative;
       }
-      a:media(min-width: 401px) {
-        background-color: #0f0;
+      .groups:media(min-width: 200px) .label {
+        display: none;
       }
-      a:media(min-width: 801px) {
-        background-color: #00f;
+      .groups:media(min-width: 200px) .tab {
+        font-weight: normal;
+        font-size: 1em;
+        margin: 0;
+        padding: .5em;
+        vertical-align: top;
+        display: none;
+        background-color: #eee;
+        cursor: pointer;
+        cursor: hand;
+      }
+      .groups:media(min-width: 200px) .tab.active {
+        background-color: #ddd;
+        border-bottom: 4px solid #fff;
+        display: block;
+        cursor: default;
+      }
+      .groups:media(min-width: 200px) .button {
+        position: absolute;
+        font-weight: normal;
+        font-size: 1em;
+        margin: 0;
+        padding: .5em;
+        vertical-align: top;
+        display: inline-block;
+        background-color: #eee;
+        height: 1.5em;
+        width: 1.5em;
+        cursor: pointer;
+        cursor: hand;
+        border-bottom: 4px solid #fff;
+        top: 0;
+      }
+      .groups:media(min-width: 200px) .button.prev {
+        left: 0;
+        border-right: 4px solid #fff;
+      }
+      .groups:media(min-width: 200px) .button.next {
+        right: 0;
+        border-left: 4px solid #fff;
+      }
+      .groups:media(min-width: 200px) .button:before {
+        content: '';
+        position: absolute;
+        top: .75em;
+        border: .5em solid transparent;
+        line-height: 0;
+      }
+      .groups:media(min-width: 200px) .button.prev:before {
+        left: .5em;
+        border-right-color: #333;
+      }
+      .groups:media(min-width: 200px) .button.next:before {
+        right: .5em;
+        border-left-color: #333;
+      }
+      .groups:media(min-width: 200px) .panel {
+        text-align: left;
+        display: none;
+      }
+      .groups:media(min-width: 200px) .panel.active {
+        display: block;
+      }
+
+      .groups:media(min-width: 400px) {
+        text-align: left;
+      }
+      .groups:media(min-width: 400px) .tab {
+        display: inline-block;
+      }
+      .groups:media(min-width: 400px) .tab.active {
+        display: inline-block;
+        border-bottom: 4px solid #ddd;
+      }
+      .groups:media(min-width: 400px) .button {
+        display: none;
       }
     </style>
   </head>
   <body>
 
     <div id="small">
-      <a href="#">test</a>
+      <div class="groups">
+        <h2 class="label">Group 1</h2>
+        <ul class="panel">
+          <li>Group 1 Item 1</li>
+          <li>Group 1 Item 2</li>
+          <li>Group 1 Item 3</li>
+          <li>Group 1 Item 4</li>
+          <li>Group 1 Item 5</li>
+          <li>Group 1 Item 6</li>
+        </ul>
+        <h2 class="label">Group 2</h2>
+        <ul class="panel">
+          <li>Group 2 Item 1</li>
+          <li>Group 2 Item 2</li>
+          <li>Group 2 Item 3</li>
+          <li>Group 2 Item 4</li>
+          <li>Group 2 Item 5</li>
+          <li>Group 2 Item 6</li>
+        </ul>
+        <h2 class="label">Group 3</h2>
+        <ul class="panel">
+          <li>Group 3 Item 1</li>
+          <li>Group 3 Item 2</li>
+          <li>Group 3 Item 3</li>
+          <li>Group 3 Item 4</li>
+          <li>Group 3 Item 5</li>
+          <li>Group 3 Item 6</li>
+        </ul>
+        <h2 class="label">Group 4</h2>
+        <ul class="panel">
+          <li>Group 4 Item 1</li>
+          <li>Group 4 Item 2</li>
+          <li>Group 4 Item 3</li>
+          <li>Group 4 Item 4</li>
+          <li>Group 4 Item 5</li>
+          <li>Group 4 Item 6</li>
+        </ul>
+        <h2 class="label">Group 5</h2>
+        <ul class="panel">
+          <li>Group 5 Item 1</li>
+          <li>Group 5 Item 2</li>
+          <li>Group 5 Item 3</li>
+          <li>Group 5 Item 4</li>
+          <li>Group 5 Item 5</li>
+          <li>Group 5 Item 6</li>
+        </ul>
+      </div>
     </div>
 
     <div id="medium">
-      <a href="#">test</a>
+      <div class="groups">
+        <h2 class="label">Group 1</h2>
+        <ul class="panel">
+          <li>Group 1 Item 1</li>
+          <li>Group 1 Item 2</li>
+          <li>Group 1 Item 3</li>
+          <li>Group 1 Item 4</li>
+          <li>Group 1 Item 5</li>
+          <li>Group 1 Item 6</li>
+        </ul>
+        <h2 class="label">Group 2</h2>
+        <ul class="panel">
+          <li>Group 2 Item 1</li>
+          <li>Group 2 Item 2</li>
+          <li>Group 2 Item 3</li>
+          <li>Group 2 Item 4</li>
+          <li>Group 2 Item 5</li>
+          <li>Group 2 Item 6</li>
+        </ul>
+        <h2 class="label">Group 3</h2>
+        <ul class="panel">
+          <li>Group 3 Item 1</li>
+          <li>Group 3 Item 2</li>
+          <li>Group 3 Item 3</li>
+          <li>Group 3 Item 4</li>
+          <li>Group 3 Item 5</li>
+          <li>Group 3 Item 6</li>
+        </ul>
+        <h2 class="label">Group 4</h2>
+        <ul class="panel">
+          <li>Group 4 Item 1</li>
+          <li>Group 4 Item 2</li>
+          <li>Group 4 Item 3</li>
+          <li>Group 4 Item 4</li>
+          <li>Group 4 Item 5</li>
+          <li>Group 4 Item 6</li>
+        </ul>
+        <h2 class="label">Group 5</h2>
+        <ul class="panel">
+          <li>Group 5 Item 1</li>
+          <li>Group 5 Item 2</li>
+          <li>Group 5 Item 3</li>
+          <li>Group 5 Item 4</li>
+          <li>Group 5 Item 5</li>
+          <li>Group 5 Item 6</li>
+        </ul>
+      </div>
     </div>
 
     <div id="large">
-      <a href="#">test</a>
+      <div class="groups">
+        <h2 class="label">Group 1</h2>
+        <ul class="panel">
+          <li>Group 1 Item 1</li>
+          <li>Group 1 Item 2</li>
+          <li>Group 1 Item 3</li>
+          <li>Group 1 Item 4</li>
+          <li>Group 1 Item 5</li>
+          <li>Group 1 Item 6</li>
+        </ul>
+        <h2 class="label">Group 2</h2>
+        <ul class="panel">
+          <li>Group 2 Item 1</li>
+          <li>Group 2 Item 2</li>
+          <li>Group 2 Item 3</li>
+          <li>Group 2 Item 4</li>
+          <li>Group 2 Item 5</li>
+          <li>Group 2 Item 6</li>
+        </ul>
+        <h2 class="label">Group 3</h2>
+        <ul class="panel">
+          <li>Group 3 Item 1</li>
+          <li>Group 3 Item 2</li>
+          <li>Group 3 Item 3</li>
+          <li>Group 3 Item 4</li>
+          <li>Group 3 Item 5</li>
+          <li>Group 3 Item 6</li>
+        </ul>
+        <h2 class="label">Group 4</h2>
+        <ul class="panel">
+          <li>Group 4 Item 1</li>
+          <li>Group 4 Item 2</li>
+          <li>Group 4 Item 3</li>
+          <li>Group 4 Item 4</li>
+          <li>Group 4 Item 5</li>
+          <li>Group 4 Item 6</li>
+        </ul>
+        <h2 class="label">Group 5</h2>
+        <ul class="panel">
+          <li>Group 5 Item 1</li>
+          <li>Group 5 Item 2</li>
+          <li>Group 5 Item 3</li>
+          <li>Group 5 Item 4</li>
+          <li>Group 5 Item 5</li>
+          <li>Group 5 Item 6</li>
+        </ul>
+      </div>
     </div>
 
+    <div id="full">
+      <div class="groups">
+        <h2 class="label">Group 1</h2>
+        <ul class="panel">
+          <li>Group 1 Item 1</li>
+          <li>Group 1 Item 2</li>
+          <li>Group 1 Item 3</li>
+          <li>Group 1 Item 4</li>
+          <li>Group 1 Item 5</li>
+          <li>Group 1 Item 6</li>
+        </ul>
+        <h2 class="label">Group 2</h2>
+        <ul class="panel">
+          <li>Group 2 Item 1</li>
+          <li>Group 2 Item 2</li>
+          <li>Group 2 Item 3</li>
+          <li>Group 2 Item 4</li>
+          <li>Group 2 Item 5</li>
+          <li>Group 2 Item 6</li>
+        </ul>
+        <h2 class="label">Group 3</h2>
+        <ul class="panel">
+          <li>Group 3 Item 1</li>
+          <li>Group 3 Item 2</li>
+          <li>Group 3 Item 3</li>
+          <li>Group 3 Item 4</li>
+          <li>Group 3 Item 5</li>
+          <li>Group 3 Item 6</li>
+        </ul>
+        <h2 class="label">Group 4</h2>
+        <ul class="panel">
+          <li>Group 4 Item 1</li>
+          <li>Group 4 Item 2</li>
+          <li>Group 4 Item 3</li>
+          <li>Group 4 Item 4</li>
+          <li>Group 4 Item 5</li>
+          <li>Group 4 Item 6</li>
+        </ul>
+        <h2 class="label">Group 5</h2>
+        <ul class="panel">
+          <li>Group 5 Item 1</li>
+          <li>Group 5 Item 2</li>
+          <li>Group 5 Item 3</li>
+          <li>Group 5 Item 4</li>
+          <li>Group 5 Item 5</li>
+          <li>Group 5 Item 6</li>
+        </ul>
+      </div>
+    </div>
+
+    <script>
+      var
+        groups = document.querySelectorAll('.groups'),
+        jlen = groups.length,
+        j = 0;
+
+      function addTabs (el) {
+        var
+          labels = el.querySelectorAll('.label'),
+          clone,
+          space,
+          i = labels.length - 1;
+
+        if (!el.querySelectorAll('.tab').length) {
+
+          for (; i >= 0; i -= 1) {
+            space = document.createTextNode(' ');
+            el.insertBefore(space, el.firstChild);
+
+            clone = labels[i].cloneNode(true);
+            clone.className = clone.className.replace(/label/, 'tab');
+            clone.setAttribute('tab-index', i);
+            if (i === 0) {
+              clone.className += ' active';
+            }
+            el.insertBefore(clone, el.firstChild);
+
+            clone.addEventListener('click', function(e) {
+              var
+                i = 0,
+                panels = e.target.parentNode.querySelectorAll('.panel'),
+                tabs = e.target.parentNode.querySelectorAll('.tab');
+
+              for (i = 0; i < panels.length; i += 1) {
+                panels[i].className =
+                  panels[i].className.replace(/\s*active/, '');
+                tabs[i].className =
+                  tabs[i].className.replace(/\s*active/, '');
+
+                if (i === +(e.target.getAttribute('tab-index'))) {
+                  panels[i].className += ' active';
+                  tabs[i].className += ' active';
+                }
+              }
+
+            });
+          }
+
+          el.querySelectorAll('.panel')[0].className += ' active';
+
+        }
+
+      }
+
+      function hasButtons (el) {
+        return el.querySelectorAll('.button').length ? true : false;
+      }
+
+      function addButtons (el) {
+        var
+          panels = el.querySelectorAll('.panel'),
+          space,
+          prev,
+          next;
+
+        if (!el.querySelectorAll('.button').length) {
+
+          space = document.createTextNode(' ');
+          prev = document.createElement('div');
+          prev.className = 'button prev';
+          el.insertBefore(space, el.firstChild);
+          el.insertBefore(prev, el.firstChild);
+
+          space = document.createTextNode(' ');
+          next = document.createElement('div');
+          next.className = 'button next';
+          el.insertBefore(space, panels[0]);
+          el.insertBefore(next, panels[0]);
+
+          prev.addEventListener('click', function(e) {
+            var
+              i = e.target.parentNode.querySelectorAll('.active.tab')[0]
+                .getAttribute('tab-index'),
+              panels = e.target.parentNode.querySelectorAll('.panel'),
+              tabs = e.target.parentNode.querySelectorAll('.tab');
+
+            if (i > 0) {
+              panels[i].className =
+                panels[i].className.replace(/\s*active/, '');
+              tabs[i].className =
+                tabs[i].className.replace(/\s*active/, '');
+              panels[i - 1].className += ' active';
+              tabs[i - 1].className += ' active';
+            }
+          });
+
+          next.addEventListener('click', function(e) {
+            var
+              i = e.target.parentNode.querySelectorAll('.active.tab')[0]
+                .getAttribute('tab-index'),
+              panels = e.target.parentNode.querySelectorAll('.panel'),
+              tabs = e.target.parentNode.querySelectorAll('.tab');
+
+            if (+i + 1 < tabs.length) {
+              panels[i].className =
+                panels[i].className.replace(/\s*active/, '');
+              tabs[i].className =
+                tabs[i].className.replace(/\s*active/, '');
+              panels[+i + 1].className += ' active';
+              tabs[+i + 1].className += ' active';
+            }
+          });
+
+        }
+
+      }
+
+      for (; j < jlen; j += 1) {
+        groups[j].addEventListener('elq-change', function(e) {
+          if (/elq-min-width/.test(e.target.className)) {
+            addTabs(e.target);
+          }
+          if (/elq-min-width-200px/.test(e.target.className)) {
+            addButtons(e.target);
+          }
+        });
+      }
+    </script>
     <script src="../dist/elq.js"></script>
     <script>elq.process();</script>
   </body>
