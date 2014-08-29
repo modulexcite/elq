@@ -67,3 +67,19 @@ If you removed element-queries or css and want to re-process, run `elq.unregiste
 Alternatively, you can use `elq.register(SELECTOR, MEDIASYNTAX, CSSCLASS)` and `elq.unregister(SELECTOR, MEDIASYNTAX)` to add or remove element-queries directly from JavaScript without the need for element-queries in the css.
 
 Full documentation is available in the `/docs` folder.
+
+## JavaScrip callbacks
+
+Whenever elq adds or removes a class, it fires an `elq-change` event that can be listened for to trigger a callback. An example:
+
+```js
+document.getElementById('someId').addEventListener('elq-change', function(e) {
+  // e.target = element on which the event was triggered
+  // e.detail.addedClasses = array of added classes
+  // e.detail.removedClasses = array of removed classes
+  // e.deteil.contextHeight = height of the context
+  // e.detail.contextWidth = width pf the context
+});
+```
+
+This allows you to enhance your modules as their context changes.
