@@ -459,13 +459,13 @@ window.elq = (function (elq, document) {
       }
     );
     media = media.replace(
-      /\s*(?:(min|max)-)?aspect-ratio\s*:\s*(\S+)\s*/g,
-      function (unused, mm, val) {
+      /\s*(?:(min|max)-)?aspect-ratio\s*:\s*(\d+)\/(\d+)\s*/g,
+      function (unused, mm, w, h) {
         var operator, left, right;
 
         operator = mm === 'min' ? '>=' : mm === 'max' ? '<=' : '==';
         left = '(elw/elh)';
-        right = val;
+        right = '(' + w + '/' + h + ')';
 
         return left + operator + right;
       }

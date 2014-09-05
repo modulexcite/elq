@@ -533,13 +533,13 @@ window.elq = (function (elq, document) {
       }
     );
     media = media.replace(
-      /\s*(?:(min|max)-)?aspect-ratio\s*:\s*(\S+)\s*/g,
-      function (unused, mm, val) {
+      /\s*(?:(min|max)-)?aspect-ratio\s*:\s*(\d+)\/(\d+)\s*/g,
+      function (unused, mm, w, h) {
         var operator, left, right;
 
         operator = mm === &#x27;min&#x27; ? &#x27;&gt;=&#x27; : mm === &#x27;max&#x27; ? &#x27;&lt;=&#x27; : &#x27;==&#x27;;
         left = &#x27;(elw/elh)&#x27;;
-        right = val;
+        right = &#x27;(&#x27; + w + &#x27;/&#x27; + h + &#x27;)&#x27;;
 
         return left + operator + right;
       }

@@ -504,12 +504,12 @@ describe('elq', function () {
 
       it('should replace min-aspect-ratio statements', function () {
         var
-          in1  = 'min-aspect-ratio: 1.5',
-          out1 = '((elw/elh)>=1.5)',
+          in1  = 'min-aspect-ratio: 1/5',
+          out1 = '((elw/elh)>=(1/5))',
           in2  = 'min-aspect-ratio: 16/19',
-          out2 = '((elw/elh)>=16/19)',
-          in3  = 'min-aspect-ratio: .3',
-          out3 = '((elw/elh)>=.3)';
+          out2 = '((elw/elh)>=(16/19))',
+          in3  = 'min-aspect-ratio: 1/3',
+          out3 = '((elw/elh)>=(1/3))';
 
         expect(elq._revealed.mediaToCondition(in1)).to.equal(out1);
         expect(elq._revealed.mediaToCondition(in2)).to.equal(out2);
@@ -518,12 +518,12 @@ describe('elq', function () {
 
       it('should replace max-aspect-ratio statements', function () {
         var
-          in1  = 'max-aspect-ratio: 1.5',
-          out1 = '((elw/elh)<=1.5)',
+          in1  = 'max-aspect-ratio: 1/5',
+          out1 = '((elw/elh)<=(1/5))',
           in2  = 'max-aspect-ratio: 16/19',
-          out2 = '((elw/elh)<=16/19)',
-          in3  = 'max-aspect-ratio: .3',
-          out3 = '((elw/elh)<=.3)';
+          out2 = '((elw/elh)<=(16/19))',
+          in3  = 'max-aspect-ratio: 1/3',
+          out3 = '((elw/elh)<=(1/3))';
 
         expect(elq._revealed.mediaToCondition(in1)).to.equal(out1);
         expect(elq._revealed.mediaToCondition(in2)).to.equal(out2);
@@ -532,12 +532,12 @@ describe('elq', function () {
 
       it('should replace aspect-ratio statements', function () {
         var
-          in1  = 'aspect-ratio: 1.5',
-          out1 = '((elw/elh)==1.5)',
+          in1  = 'aspect-ratio: 1/5',
+          out1 = '((elw/elh)==(1/5))',
           in2  = 'aspect-ratio: 16/19',
-          out2 = '((elw/elh)==16/19)',
-          in3  = 'aspect-ratio: .3',
-          out3 = '((elw/elh)==.3)';
+          out2 = '((elw/elh)==(16/19))',
+          in3  = 'aspect-ratio: 1/3',
+          out3 = '((elw/elh)==(1/3))';
 
         expect(elq._revealed.mediaToCondition(in1)).to.equal(out1);
         expect(elq._revealed.mediaToCondition(in2)).to.equal(out2);
