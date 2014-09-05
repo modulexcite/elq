@@ -41,6 +41,13 @@
         vertical-align: top;
         width: 100%;
       }
+      #morph {
+        height: 550px;
+        width: 199px;
+        display: none;
+        -webkit-transition: width 2s;
+        transition: width 2s;
+      }
 
       body {
         line-height: 1.5em;
@@ -177,6 +184,33 @@
 
       <h1>elq.js Example: Tabbed Content</h1>
 
+      <div id="morph">
+        <div class="groups">
+          <h3 class="label">Stark</h3>
+          <ul class="panel">
+            <li>Eddard</li>
+            <li>Catelyn</li>
+            <li>Robb</li>
+            <li>Sansa</li>
+            <li>Brandon</li>
+            <li>Arya</li>
+            <li>Rickon</li>
+          </ul>
+          <h3 class="label">Lannister</h3>
+          <ul class="panel">
+            <li>Tywin</li>
+            <li>Cersei</li>
+            <li>Jamie</li>
+            <li>Tyrion</li>
+          </ul>
+          <h3 class="label">Targaryen</h3>
+          <ul class="panel">
+            <li>Viserys</li>
+            <li>Daenerys</li>
+          </ul>
+        </div>
+      </div>
+
       <p>elq.js renders the same html differently based on the context of the container in which that html is rendered. In this example, a series of lists with headings will be rendered differently based on the width of its rendering environment. The breakpoints are as follows:</p>
 
       <section>
@@ -187,7 +221,7 @@
 
         <div id="column">
           <div class="groups">
-            <h3 class="label">House Stark</h3>
+            <h3 class="label">Stark</h3>
             <ul class="panel">
               <li>Eddard</li>
               <li>Catelyn</li>
@@ -197,14 +231,14 @@
               <li>Arya</li>
               <li>Rickon</li>
             </ul>
-            <h3 class="label">House Lannister</h3>
+            <h3 class="label">Lannister</h3>
             <ul class="panel">
               <li>Tywin</li>
               <li>Cersei</li>
               <li>Jamie</li>
               <li>Tyrion</li>
             </ul>
-            <h3 class="label">House Targaryen</h3>
+            <h3 class="label">Targaryen</h3>
             <ul class="panel">
               <li>Viserys</li>
               <li>Daenerys</li>
@@ -226,7 +260,7 @@
 
         <div id="pages">
           <div class="groups">
-            <h3 class="label">House Stark</h3>
+            <h3 class="label">Stark</h3>
             <ul class="panel">
               <li>Eddard</li>
               <li>Catelyn</li>
@@ -236,14 +270,14 @@
               <li>Arya</li>
               <li>Rickon</li>
             </ul>
-            <h3 class="label">House Lannister</h3>
+            <h3 class="label">Lannister</h3>
             <ul class="panel">
               <li>Tywin</li>
               <li>Cersei</li>
               <li>Jamie</li>
               <li>Tyrion</li>
             </ul>
-            <h3 class="label">House Targaryen</h3>
+            <h3 class="label">Targaryen</h3>
             <ul class="panel">
               <li>Viserys</li>
               <li>Daenerys</li>
@@ -265,7 +299,7 @@
 
         <div id="tabs">
           <div class="groups">
-            <h3 class="label">House Stark</h3>
+            <h3 class="label">Stark</h3>
             <ul class="panel">
               <li>Eddard</li>
               <li>Catelyn</li>
@@ -275,14 +309,14 @@
               <li>Arya</li>
               <li>Rickon</li>
             </ul>
-            <h3 class="label">House Lannister</h3>
+            <h3 class="label">Lannister</h3>
             <ul class="panel">
               <li>Tywin</li>
               <li>Cersei</li>
               <li>Jamie</li>
               <li>Tyrion</li>
             </ul>
-            <h3 class="label">House Targaryen</h3>
+            <h3 class="label">Targaryen</h3>
             <ul class="panel">
               <li>Viserys</li>
               <li>Daenerys</li>
@@ -437,6 +471,23 @@
       }
     </script>
     <script src="../dist/elq.js"></script>
-    <script>elq.process();</script>
+    <script>
+      elq.process();
+
+      function grow() {
+        document.getElementById('morph').style.width = '1024px';
+        setTimeout(shrink, 4000);
+      }
+
+      function shrink() {
+        document.getElementById('morph').style.width = '199px';
+        setTimeout(grow, 4000);
+      }
+
+      var demoInterval = window.setInterval(elq.respond, 100);
+
+      document.getElementById('morph').style.display = 'block';
+      grow();
+    </script>
   </body>
 </html>

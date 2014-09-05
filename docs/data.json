@@ -344,6 +344,18 @@
         {
             "file": "src/elq.src.js",
             "line": 597,
+            "description": "Force elq to respond to current context",
+            "itemtype": "method",
+            "name": "respond",
+            "return": {
+                "description": "True",
+                "type": "Boolean"
+            },
+            "class": "elq"
+        },
+        {
+            "file": "src/elq.src.js",
+            "line": 607,
             "description": "Adjust how often a resize/orientation event will throttle",
             "itemtype": "method",
             "name": "respondAfter",

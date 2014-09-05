@@ -669,6 +669,16 @@ window.elq = (function (elq, document) {
   };
 
   /**
+   * Force elq to respond to current context
+   *
+   * @method respond
+   * @return {Boolean} True
+   */
+  elq.respond = function () {
+    return privateMethods.applyContext();
+  };
+
+  /**
    * Adjust how often a resize/orientation event will throttle
    *
    * @method respondAfter
