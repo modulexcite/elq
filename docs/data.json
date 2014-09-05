@@ -123,7 +123,7 @@
             "line": 73,
             "description": "A regular expression for finding valid element queries",
             "itemtype": "property",
-            "name": "validelq",
+            "name": "elqSyntax",
             "access": "private",
             "tagname": "",
             "type": "Regexp Object",
@@ -132,9 +132,9 @@
         {
             "file": "src/elq.src.js",
             "line": 104,
-            "description": "A regular expression for temporarily replacing strings that may contain\ncharacters that break the validelq regular expression ,}) etc.",
+            "description": "A regular expression for temporarily replacing strings that may contain\ncharacters that break the elqSyntax regular expression ,}) etc.",
             "itemtype": "property",
-            "name": "stringClean",
+            "name": "cssString",
             "access": "private",
             "tagname": "",
             "type": "Regexp Object",
@@ -187,7 +187,7 @@
         },
         {
             "file": "src/elq.src.js",
-            "line": 196,
+            "line": 199,
             "description": "Removes generated style and fetched css from internal cache",
             "itemtype": "method",
             "name": "unfetchExternalCSS",
@@ -208,7 +208,7 @@
         },
         {
             "file": "src/elq.src.js",
-            "line": 223,
+            "line": 230,
             "description": "Loop through each selector and process matching elements\n\nFires an 'elq-change' event if any classes are added or removed by elq.\nCustom event contains:\n  event.detail.contextHeight\n  event.detail.contextWidth\n  event.detail.addedClasses\n  event.detail.removedClasses",
             "itemtype": "method",
             "name": "applyContext",
@@ -222,7 +222,7 @@
         },
         {
             "file": "src/elq.src.js",
-            "line": 338,
+            "line": 346,
             "description": "Listen for context change and modify all selectors",
             "itemtype": "method",
             "name": "respondToContext",
@@ -236,7 +236,7 @@
         },
         {
             "file": "src/elq.src.js",
-            "line": 374,
+            "line": 382,
             "description": "Parses all CSS and registers found element queries",
             "itemtype": "method",
             "name": "parseCSS",
@@ -250,7 +250,7 @@
         },
         {
             "file": "src/elq.src.js",
-            "line": 424,
+            "line": 433,
             "description": "Converts the media query portion of an element query into a condition",
             "itemtype": "method",
             "name": "mediaToCondition",
@@ -271,7 +271,7 @@
         },
         {
             "file": "src/elq.src.js",
-            "line": 475,
+            "line": 484,
             "description": "Registers an element query",
             "itemtype": "method",
             "name": "register",
@@ -300,7 +300,7 @@
         },
         {
             "file": "src/elq.src.js",
-            "line": 536,
+            "line": 545,
             "description": "Unregisters an element query",
             "itemtype": "method",
             "name": "unregister",
@@ -324,7 +324,7 @@
         },
         {
             "file": "src/elq.src.js",
-            "line": 561,
+            "line": 570,
             "description": "Processes the entire page for element queries",
             "itemtype": "method",
             "name": "process",
@@ -343,7 +343,7 @@
         },
         {
             "file": "src/elq.src.js",
-            "line": 588,
+            "line": 597,
             "description": "Adjust how often a resize/orientation event will throttle",
             "itemtype": "method",
             "name": "respondAfter",

@@ -147,11 +147,11 @@ window.elq = (function (elq, document) {
     /**
      * A regular expression for finding valid element queries
      *
-     * @property validelq
+     * @property elqSyntax
      * @private
      * @type Regexp Object
      */
-    validelq = new RegExp(
+    elqSyntax = new RegExp(
       &#x27;\\s*([^,}]+)&#x27; +                            // $1: selector
       &#x27;\\:media\\(&#x27; +                             //     pseudo :media(
         &#x27;(&#x27; +                                     // $2: media query
@@ -177,13 +177,13 @@ window.elq = (function (elq, document) {
 
     /**
      * A regular expression for temporarily replacing strings that may contain
-     * characters that break the validelq regular expression ,}) etc.
+     * characters that break the elqSyntax regular expression ,}) etc.
      *
-     * @property stringClean
+     * @property cssString
      * @private
      * @type Regexp Object
      */
-    stringClean = new RegExp(
+    cssString = new RegExp(
       &#x27;([^\\\\])&#x27; +    // $1: non-escaped starting delimiter
       &#x27;([\&#x27;&quot;])&#x27; +      // $2: delimiter
       &#x27;(.*?[^\\\\])&#x27; + // $3: string contents
@@ -238,6 +238,7 @@ window.elq = (function (elq, document) {
       if (media) {
         style.setAttribute(&#x27;media&#x27;, media);
       }
+
       style.setAttribute(&#x27;href&#x27;, href);
       style.className = &#x27;elq-fetched&#x27;;
 
@@ -251,7 +252,9 @@ window.elq = (function (elq, document) {
           } else {
             privateMethods.unfetchExternalCSS(link);
           }
+
           remainingLinks -= 1;
+
           if (!remainingLinks) {
             privateMethods.parseCSS();
           }
@@ -279,13 +282,17 @@ window.elq = (function (elq, document) {
     var
       success = false,
       href    = link.getAttribute(&#x27;href&#x27;),
-      media   = link.getAttribute(&#x27;media&#x27;) || &#x27;&#x27;,
+      media   = link.getAttribute(&#x27;media&#x27;),
       style   = link.nextSibling;
 
-    if (style &amp;&amp; (style.tagName.toLowerCase() === &#x27;style&#x27;) &amp;&amp;
-      (link.getAttribute(&#x27;href&#x27;) === style.getAttribute(&#x27;href&#x27;)) &amp;&amp;
-      (link.getAttribute(&#x27;media&#x27;) === style.getAttribute(&#x27;media&#x27;)) &amp;&amp;
-      (style.className === &#x27;elq-fetched&#x27;)) {
+    if (
+      style &amp;&amp;
+      (style.tagName.toLowerCase() === &#x27;style&#x27;) &amp;&amp;
+      (style.getAttribute(&#x27;href&#x27;) === href) &amp;&amp;
+      (style.getAttribute(&#x27;media&#x27;) === media) &amp;&amp;
+      (style.className === &#x27;elq-fetched&#x27;)
+    ) {
+      media = media || &#x27;&#x27;;
       style.parentNode.removeChild(style);
       delete(cachedLinks[href + media]);
       success = true;
@@ -383,14 +390,15 @@ window.elq = (function (elq, document) {
           null
         ).getPropertyValue(&#x27;fontSize&#x27;);
 
-        parentWidth  = parent.clientWidth;
-        parentWidth  += (2 * (parseInt(parent.style.padding, 10) || 0));
-        parentWidth  += parseInt(parent.style.paddingLeft, 10) || 0;
-        parentWidth  += parseInt(parent.style.paddingRight, 10) || 0;
-        parentHeight = parent.clientHeight;
-        parentHeight += (2 * (parseInt(parent.style.padding, 10) || 0));
-        parentHeight += parseInt(parent.style.paddingTop, 10) || 0;
-        parentHeight += parseInt(parent.style.paddingBottom, 10) || 0;
+        parentWidth = parent.clientWidth +
+          (2 * (parseInt(parent.style.padding, 10) || 0)) + // padding
+          (parseInt(parent.style.paddingLeft, 10) || 0) +   // paddingLeft
+          (parseInt(parent.style.paddingRight, 10) || 0);   // paddingRight
+
+        parentHeight = parent.clientHeight +
+          (2 * (parseInt(parent.style.padding, 10) || 0)) + // padding
+          (parseInt(parent.style.paddingTop, 10) || 0) +    // paddingTop
+          (parseInt(parent.style.paddingBottom, 10) || 0);  // paddingBottom
 
         processContexts(
           selector,
@@ -475,14 +483,15 @@ window.elq = (function (elq, document) {
 
     for (index = 0; index &lt; length; index += 1) {
       style = styles[index];
-      css   = style.innerHTML;
-      css   = css.replace(/\s+/g, &#x27; &#x27;);
-      css   = css.replace(/(^|\})\s*/g, &#x27;$1\n&#x27;);
-      css = css.replace(stringClean, replaceStrings);
 
-      while (validelq.test(css)) {
+      css = style.innerHTML;
+      css = css.replace(/\s+/g, &#x27; &#x27;);
+      css = css.replace(/(^|\})\s*/g, &#x27;$1\n&#x27;);
+      css = css.replace(cssString, replaceStrings);
+
+      while (elqSyntax.test(css)) {
         success = true;
-        css = css.replace(validelq, replaceCSS);
+        css = css.replace(elqSyntax, replaceCSS);
       }
 
       css = css.replace(/-=STRING=-/g, restoreStrings);

@@ -133,7 +133,7 @@
     
         
     
-        <a href="../../files/src_elq.src.js.html#l223"><code>src&#x2F;elq.src.js:223</code></a>
+        <a href="../../files/src_elq.src.js.html#l230"><code>src&#x2F;elq.src.js:230</code></a>
     </span><br>
     <p>Loop through each selector and process matching elements</p>
 <p>Fires an &#39;elq-change&#39; event if any classes are added or removed by elq.
@@ -200,7 +200,7 @@ Custom event contains:
     
         
     
-        <a href="../../files/src_elq.src.js.html#l424"><code>src&#x2F;elq.src.js:424</code></a>
+        <a href="../../files/src_elq.src.js.html#l433"><code>src&#x2F;elq.src.js:433</code></a>
     </span><br>
     <p>Converts the media query portion of an element query into a condition</p>
 
@@ -238,7 +238,7 @@ Custom event contains:
     
         
     
-        <a href="../../files/src_elq.src.js.html#l374"><code>src&#x2F;elq.src.js:374</code></a>
+        <a href="../../files/src_elq.src.js.html#l382"><code>src&#x2F;elq.src.js:382</code></a>
     </span><br>
     <p>Parses all CSS and registers found element queries</p>
 
@@ -261,7 +261,7 @@ Custom event contains:
     
         
     
-        <a href="../../files/src_elq.src.js.html#l561"><code>src&#x2F;elq.src.js:561</code></a>
+        <a href="../../files/src_elq.src.js.html#l570"><code>src&#x2F;elq.src.js:570</code></a>
     </span><br>
     <p>Processes the entire page for element queries</p>
 
@@ -299,7 +299,7 @@ Custom event contains:
     
         
     
-        <a href="../../files/src_elq.src.js.html#l475"><code>src&#x2F;elq.src.js:475</code></a>
+        <a href="../../files/src_elq.src.js.html#l484"><code>src&#x2F;elq.src.js:484</code></a>
     </span><br>
     <p>Registers an element query</p>
 
@@ -357,7 +357,7 @@ Custom event contains:
     
         
     
-        <a href="../../files/src_elq.src.js.html#l588"><code>src&#x2F;elq.src.js:588</code></a>
+        <a href="../../files/src_elq.src.js.html#l597"><code>src&#x2F;elq.src.js:597</code></a>
     </span><br>
     <p>Adjust how often a resize/orientation event will throttle</p>
 
@@ -395,7 +395,7 @@ Custom event contains:
     
         
     
-        <a href="../../files/src_elq.src.js.html#l338"><code>src&#x2F;elq.src.js:338</code></a>
+        <a href="../../files/src_elq.src.js.html#l346"><code>src&#x2F;elq.src.js:346</code></a>
     </span><br>
     <p>Listen for context change and modify all selectors</p>
 
@@ -418,7 +418,7 @@ Custom event contains:
     
         
     
-        <a href="../../files/src_elq.src.js.html#l196"><code>src&#x2F;elq.src.js:196</code></a>
+        <a href="../../files/src_elq.src.js.html#l199"><code>src&#x2F;elq.src.js:199</code></a>
     </span><br>
     <p>Removes generated style and fetched css from internal cache</p>
 
@@ -456,7 +456,7 @@ Custom event contains:
     
         
     
-        <a href="../../files/src_elq.src.js.html#l536"><code>src&#x2F;elq.src.js:536</code></a>
+        <a href="../../files/src_elq.src.js.html#l545"><code>src&#x2F;elq.src.js:545</code></a>
     </span><br>
     <p>Unregisters an element query</p>
 
@@ -506,6 +506,27 @@ Custom event contains:
     <code>cachedLinks</code> &lt;<strong>Object</strong>&gt;<br>
     <span class="foundat"><a href="../../files/src_elq.src.js.html#l53"><code>src&#x2F;elq.src.js:53</code></a></span>
     <p>A hash of cached links to avoid re-fetching</p>
+
+    
+</div>
+
+            
+                <a name="props_cssString"></a>
+<div class="props item">
+    <code>cssString</code> &lt;<strong>Regexp Object</strong>&gt;<br>
+    <span class="foundat"><a href="../../files/src_elq.src.js.html#l104"><code>src&#x2F;elq.src.js:104</code></a></span>
+    <p>A regular expression for temporarily replacing strings that may contain
+characters that break the elqSyntax regular expression ,}) etc.</p>
+
+    
+</div>
+
+            
+                <a name="props_elqSyntax"></a>
+<div class="props item">
+    <code>elqSyntax</code> &lt;<strong>Regexp Object</strong>&gt;<br>
+    <span class="foundat"><a href="../../files/src_elq.src.js.html#l73"><code>src&#x2F;elq.src.js:73</code></a></span>
+    <p>A regular expression for finding valid element queries</p>
 
     
 </div>
@@ -566,27 +587,6 @@ Custom event contains:
     <code>respondTimeout</code> &lt;<strong>Object</strong>&gt;<br>
     <span class="foundat"><a href="../../files/src_elq.src.js.html#l23"><code>src&#x2F;elq.src.js:23</code></a></span>
     <p>Allows pre-processing after a window resize with less resources</p>
-
-    
-</div>
-
-            
-                <a name="props_stringClean"></a>
-<div class="props item">
-    <code>stringClean</code> &lt;<strong>Regexp Object</strong>&gt;<br>
-    <span class="foundat"><a href="../../files/src_elq.src.js.html#l104"><code>src&#x2F;elq.src.js:104</code></a></span>
-    <p>A regular expression for temporarily replacing strings that may contain
-characters that break the validelq regular expression ,}) etc.</p>
-
-    
-</div>
-
-            
-                <a name="props_validelq"></a>
-<div class="props item">
-    <code>validelq</code> &lt;<strong>Regexp Object</strong>&gt;<br>
-    <span class="foundat"><a href="../../files/src_elq.src.js.html#l73"><code>src&#x2F;elq.src.js:73</code></a></span>
-    <p>A regular expression for finding valid element queries</p>
 
     
 </div>
