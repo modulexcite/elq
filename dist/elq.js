@@ -75,32 +75,48 @@ window.elq = (function (elq, document) {
      *
      * @property validelq
      * @private
-     * @type Object
-     * @default {}
+     * @type Regexp Object
      */
     validelq = new RegExp(
-      '\\s*([^,}]+)' + // selector
-      '\\:media\\(' + // :media(
-        '(' + // capture
-          '(?:' + // pattern or simple
-            '(?:' + // one comma-separated (or) group
-              '(?:\\s*not)?\\s*' + // optional or group negation
-              '(?:\\([^)]+\\))' + // and-separated group
-              '(?:\\s*and\\s*(?:\\([^)]+\\)))*' + // multiple ands
+      '\\s*([^,}]+)' +                            // $1: selector
+      '\\:media\\(' +                             //     pseudo :media(
+        '(' +                                     // $2: media query
+          '(?:' +
+            '(?:' +                               //     one "or" group
+              '(?:\\s*not)?\\s*' +                //     optional "not"
+              '(?:\\([^)]+\\))' +                 //     one "and" group
+              '(?:\\s*and\\s*(?:\\([^)]+\\)))*' + //     optional "and" groups
             ')' +
-            '(?:' + // multiple ors
-              '\\s*,' + // or
-              '(?:\\s*not)\\s*' + // optional or group negation
-              '(?:\\([^)]+\\))' + // and-separated group
-              '(?:\\s*and\\s*(?:\\([^)]+\\)))*' + // multiple ands
+            '(?:' +                               //     optional "or" groups
+              '\\s*,' +                           //     "or" seperator
+              '(?:\\s*not)\\s*' +                 //     optional "not"
+              '(?:\\([^)]+\\))' +                 //     one "and" group
+              '(?:\\s*and\\s*(?:\\([^)]+\\)))*' + //     optional and group
             ')*' +
           '|' +
             '[^())]+' +
           ')' +
         ')' +
-      '\\)', // )
+      '\\)',                                      //     end pseudo )
       'g'
     ),
+
+    /**
+     * A regular expression for temporarily replacing strings that may contain
+     * characters that break the validelq regular expression ,}) etc.
+     *
+     * @property stringClean
+     * @private
+     * @type Regexp Object
+     */
+    stringClean = new RegExp(
+      '([^\\\\])' +    // $1: non-escaped starting delimiter
+      '([\'"])' +      // $2: delimiter
+      '(.*?[^\\\\])' + // $3: string contents
+      '\\2',           //     closing matching delimiter
+      'g'
+    ),
+
 
     /**
      * The number of pixels corresponding to one rem at context change time
@@ -369,8 +385,17 @@ window.elq = (function (elq, document) {
       index,
       style,
       css,
+      strings = [],
       replaceCSS = function (unused, selector, media) {
         return selector + '.' + elq.register(selector, media);
+      },
+      replaceStrings = function (unused, beforeDelimiter, delimiter, string) {
+        strings.push(delimiter + string + delimiter);
+        return (beforeDelimiter + '-=STRING=-');
+      },
+      restoreStrings = function (unused) {
+        var restored = strings.shift();
+        return restored;
       };
 
     for (index = 0; index < length; index += 1) {
@@ -378,11 +403,14 @@ window.elq = (function (elq, document) {
       css   = style.innerHTML;
       css   = css.replace(/\s+/g, ' ');
       css   = css.replace(/(^|\})\s*/g, '$1\n');
+      css = css.replace(stringClean, replaceStrings);
 
       while (validelq.test(css)) {
         success = true;
         css = css.replace(validelq, replaceCSS);
       }
+
+      css = css.replace(/-=STRING=-/g, restoreStrings);
 
       style.innerHTML = css;
     }

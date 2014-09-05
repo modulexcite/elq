@@ -149,32 +149,48 @@ window.elq = (function (elq, document) {
      *
      * @property validelq
      * @private
-     * @type Object
-     * @default {}
+     * @type Regexp Object
      */
     validelq = new RegExp(
-      &#x27;\\s*([^,}]+)&#x27; + // selector
-      &#x27;\\:media\\(&#x27; + // :media(
-        &#x27;(&#x27; + // capture
-          &#x27;(?:&#x27; + // pattern or simple
-            &#x27;(?:&#x27; + // one comma-separated (or) group
-              &#x27;(?:\\s*not)?\\s*&#x27; + // optional or group negation
-              &#x27;(?:\\([^)]+\\))&#x27; + // and-separated group
-              &#x27;(?:\\s*and\\s*(?:\\([^)]+\\)))*&#x27; + // multiple ands
+      &#x27;\\s*([^,}]+)&#x27; +                            // $1: selector
+      &#x27;\\:media\\(&#x27; +                             //     pseudo :media(
+        &#x27;(&#x27; +                                     // $2: media query
+          &#x27;(?:&#x27; +
+            &#x27;(?:&#x27; +                               //     one &quot;or&quot; group
+              &#x27;(?:\\s*not)?\\s*&#x27; +                //     optional &quot;not&quot;
+              &#x27;(?:\\([^)]+\\))&#x27; +                 //     one &quot;and&quot; group
+              &#x27;(?:\\s*and\\s*(?:\\([^)]+\\)))*&#x27; + //     optional &quot;and&quot; groups
             &#x27;)&#x27; +
-            &#x27;(?:&#x27; + // multiple ors
-              &#x27;\\s*,&#x27; + // or
-              &#x27;(?:\\s*not)\\s*&#x27; + // optional or group negation
-              &#x27;(?:\\([^)]+\\))&#x27; + // and-separated group
-              &#x27;(?:\\s*and\\s*(?:\\([^)]+\\)))*&#x27; + // multiple ands
+            &#x27;(?:&#x27; +                               //     optional &quot;or&quot; groups
+              &#x27;\\s*,&#x27; +                           //     &quot;or&quot; seperator
+              &#x27;(?:\\s*not)\\s*&#x27; +                 //     optional &quot;not&quot;
+              &#x27;(?:\\([^)]+\\))&#x27; +                 //     one &quot;and&quot; group
+              &#x27;(?:\\s*and\\s*(?:\\([^)]+\\)))*&#x27; + //     optional and group
             &#x27;)*&#x27; +
           &#x27;|&#x27; +
             &#x27;[^())]+&#x27; +
           &#x27;)&#x27; +
         &#x27;)&#x27; +
-      &#x27;\\)&#x27;, // )
+      &#x27;\\)&#x27;,                                      //     end pseudo )
       &#x27;g&#x27;
     ),
+
+    /**
+     * A regular expression for temporarily replacing strings that may contain
+     * characters that break the validelq regular expression ,}) etc.
+     *
+     * @property stringClean
+     * @private
+     * @type Regexp Object
+     */
+    stringClean = new RegExp(
+      &#x27;([^\\\\])&#x27; +    // $1: non-escaped starting delimiter
+      &#x27;([\&#x27;&quot;])&#x27; +      // $2: delimiter
+      &#x27;(.*?[^\\\\])&#x27; + // $3: string contents
+      &#x27;\\2&#x27;,           //     closing matching delimiter
+      &#x27;g&#x27;
+    ),
+
 
     /**
      * The number of pixels corresponding to one rem at context change time
@@ -444,8 +460,17 @@ window.elq = (function (elq, document) {
       index,
       style,
       css,
+      strings = [],
       replaceCSS = function (unused, selector, media) {
         return selector + &#x27;.&#x27; + elq.register(selector, media);
+      },
+      replaceStrings = function (unused, beforeDelimiter, delimiter, string) {
+        strings.push(delimiter + string + delimiter);
+        return (beforeDelimiter + &#x27;-=STRING=-&#x27;);
+      },
+      restoreStrings = function (unused) {
+        var restored = strings.shift();
+        return restored;
       };
 
     for (index = 0; index &lt; length; index += 1) {
@@ -453,11 +478,14 @@ window.elq = (function (elq, document) {
       css   = style.innerHTML;
       css   = css.replace(/\s+/g, &#x27; &#x27;);
       css   = css.replace(/(^|\})\s*/g, &#x27;$1\n&#x27;);
+      css = css.replace(stringClean, replaceStrings);
 
       while (validelq.test(css)) {
         success = true;
         css = css.replace(validelq, replaceCSS);
       }
+
+      css = css.replace(/-=STRING=-/g, restoreStrings);
 
       style.innerHTML = css;
     }
