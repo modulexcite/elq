@@ -233,7 +233,7 @@
         },
         {
             "file": "src/elq.src.js",
-            "line": 376,
+            "line": 379,
             "description": "Parses all CSS and registers found element queries",
             "itemtype": "method",
             "name": "parseCSS",
@@ -247,7 +247,7 @@
         },
         {
             "file": "src/elq.src.js",
-            "line": 427,
+            "line": 430,
             "description": "Converts the media query portion of an element query into a condition",
             "itemtype": "method",
             "name": "mediaToCondition",
@@ -268,7 +268,7 @@
         },
         {
             "file": "src/elq.src.js",
-            "line": 478,
+            "line": 481,
             "description": "Registers an element query",
             "itemtype": "method",
             "name": "register",
@@ -297,7 +297,7 @@
         },
         {
             "file": "src/elq.src.js",
-            "line": 539,
+            "line": 542,
             "description": "Unregisters an element query",
             "itemtype": "method",
             "name": "unregister",
@@ -321,7 +321,7 @@
         },
         {
             "file": "src/elq.src.js",
-            "line": 564,
+            "line": 567,
             "description": "Processes the entire page for element queries",
             "itemtype": "method",
             "name": "process",
@@ -340,7 +340,7 @@
         },
         {
             "file": "src/elq.src.js",
-            "line": 591,
+            "line": 594,
             "description": "Loop through each selector and process matching elements\n\nFires an 'elq-change' event if any classes are added or removed by elq.\nCustom event contains:\n  event.detail.contextHeight\n  event.detail.contextWidth\n  event.detail.addedClasses\n  event.detail.removedClasses",
             "itemtype": "method",
             "name": "respond",
@@ -352,7 +352,7 @@
         },
         {
             "file": "src/elq.src.js",
-            "line": 606,
+            "line": 609,
             "description": "Adjust how often a resize/orientation event will throttle",
             "itemtype": "method",
             "name": "respondAfter",

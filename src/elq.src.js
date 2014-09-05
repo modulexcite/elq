@@ -354,7 +354,10 @@ window.elq = (function (elq, document) {
         if (document.clientWidth !== lastClientWidth ||
           document.clientHeight !== lastClientHeight) {
           clearTimeout(respondTimeout);
-          respondTimeout = setTimeout(privateMethods.respondToContext, 100);
+          respondTimeout = setTimeout(
+            privateMethods.respondToContext,
+            respondAfter
+          );
           document.lastClientWidth = document.clientWidth;
           document.lastClientHeight = document.clientHeight;
         }
