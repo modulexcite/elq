@@ -68,7 +68,7 @@ Alternatively, you can use `elq.register(SELECTOR, MEDIASYNTAX, CSSCLASS)` and `
 
 Full documentation is available in the `/docs` folder.
 
-## JavaScrip callbacks
+## JavaScript callbacks
 
 Whenever elq adds or removes a class, it fires an `elq-change` event that can be listened for to trigger a callback. An example:
 
