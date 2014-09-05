@@ -136,7 +136,117 @@ window.elq = (function (elq, document) {
      * @type Object
      * @default {}
      */
-    privateMethods = {};
+    privateMethods = {},
+
+    /**
+     * A function that applies context classes when context changes
+     * Exposed later as elq.respond
+     *
+     * @property respond
+     * @private
+     * @type Function
+     */
+    respond = function () {
+      var
+        selectors = Object.keys(registeredSelectors),
+        length    = selectors.length,
+        index,
+        processElements,
+        processContexts;
+
+      processContexts = function (
+        selector,
+        pixelsPerEM,
+        element,
+        parentWidth,
+        parentHeight
+      ) {
+        var
+          registeredSelector = registeredSelectors[selector],
+          conditions         = Object.keys(registeredSelector),
+          length             = conditions.length,
+          added              = [],
+          removed            = [],
+          changed,
+          index;
+
+        for (index = 0; index < length; index += 1) {
+
+          changed = registeredSelector[conditions[index]](
+            parentWidth,
+            parentHeight,
+            element,
+            pixelsPerEM,
+            pixelsPerREM
+          );
+
+          added = added.concat(changed.added);
+          removed = removed.concat(changed.removed);
+
+        }
+
+        if (added.length || removed.length) {
+          var event = document.createEvent('CustomEvent');
+          event.initCustomEvent(
+            'elq-change',
+            true,
+            true,
+            {
+              'addedClasses': added,
+              'removedClasses': removed,
+              'contextWidth': parentWidth,
+              'contextHeight': parentHeight
+            }
+          );
+          element.dispatchEvent(event);
+        }
+      };
+
+      processElements = function (selector) {
+        var
+          elements = document.querySelectorAll(selector),
+          length = elements.length,
+          index,
+          element,
+          parent,
+          pixelsPerEM,
+          parentWidth,
+          parentHeight;
+
+        for (index = 0; index < length; index += 1) {
+          element     = elements[index];
+          parent      = element.parentNode;
+          pixelsPerEM = document.defaultView.getComputedStyle(
+            parent,
+            null
+          ).getPropertyValue('fontSize');
+
+          parentWidth = parent.clientWidth +
+            (2 * (parseInt(parent.style.padding, 10) || 0)) + // padding
+            (parseInt(parent.style.paddingLeft, 10) || 0) +   // paddingLeft
+            (parseInt(parent.style.paddingRight, 10) || 0);   // paddingRight
+
+          parentHeight = parent.clientHeight +
+            (2 * (parseInt(parent.style.padding, 10) || 0)) + // padding
+            (parseInt(parent.style.paddingTop, 10) || 0) +    // paddingTop
+            (parseInt(parent.style.paddingBottom, 10) || 0);  // paddingBottom
+
+          processContexts(
+            selector,
+            pixelsPerEM,
+            element,
+            parentWidth,
+            parentHeight
+          );
+        }
+      };
+
+      for (index = 0; index < length; index += 1) {
+        processElements(selectors[index]);
+      }
+
+      return length ? true : false;
+    };
 
 
   /**
@@ -227,122 +337,6 @@ window.elq = (function (elq, document) {
   };
 
   /**
-   * Loop through each selector and process matching elements
-   *
-   * Fires an 'elq-change' event if any classes are added or removed by elq.
-   * Custom event contains:
-   *   event.detail.contextHeight
-   *   event.detail.contextWidth
-   *   event.detail.addedClasses
-   *   event.detail.removedClasses
-   *
-   * @method applyContext
-   * @private
-   * @return {Boolean} True if any selectors were found
-   */
-  privateMethods.applyContext = function () {
-    var
-      selectors = Object.keys(registeredSelectors),
-      length    = selectors.length,
-      index,
-      processElements,
-      processContexts;
-
-    processContexts = function (
-      selector,
-      pixelsPerEM,
-      element,
-      parentWidth,
-      parentHeight
-    ) {
-      var
-        registeredSelector = registeredSelectors[selector],
-        conditions         = Object.keys(registeredSelector),
-        length             = conditions.length,
-        added              = [],
-        removed            = [],
-        changed,
-        index;
-
-      for (index = 0; index < length; index += 1) {
-
-        changed = registeredSelector[conditions[index]](
-          parentWidth,
-          parentHeight,
-          element,
-          pixelsPerEM,
-          pixelsPerREM
-        );
-
-        added = added.concat(changed.added);
-        removed = removed.concat(changed.removed);
-
-      }
-
-      if (added.length || removed.length) {
-        var event = document.createEvent('CustomEvent');
-        event.initCustomEvent(
-          'elq-change',
-          true,
-          true,
-          {
-            'addedClasses': added,
-            'removedClasses': removed,
-            'contextWidth': parentWidth,
-            'contextHeight': parentHeight
-          }
-        );
-        element.dispatchEvent(event);
-      }
-    };
-
-    processElements = function (selector) {
-      var
-        elements = document.querySelectorAll(selector),
-        length = elements.length,
-        index,
-        element,
-        parent,
-        pixelsPerEM,
-        parentWidth,
-        parentHeight;
-
-      for (index = 0; index < length; index += 1) {
-        element     = elements[index];
-        parent      = element.parentNode;
-        pixelsPerEM = document.defaultView.getComputedStyle(
-          parent,
-          null
-        ).getPropertyValue('fontSize');
-
-        parentWidth = parent.clientWidth +
-          (2 * (parseInt(parent.style.padding, 10) || 0)) + // padding
-          (parseInt(parent.style.paddingLeft, 10) || 0) +   // paddingLeft
-          (parseInt(parent.style.paddingRight, 10) || 0);   // paddingRight
-
-        parentHeight = parent.clientHeight +
-          (2 * (parseInt(parent.style.padding, 10) || 0)) + // padding
-          (parseInt(parent.style.paddingTop, 10) || 0) +    // paddingTop
-          (parseInt(parent.style.paddingBottom, 10) || 0);  // paddingBottom
-
-        processContexts(
-          selector,
-          pixelsPerEM,
-          element,
-          parentWidth,
-          parentHeight
-        );
-      }
-    };
-
-    for (index = 0; index < length; index += 1) {
-      processElements(selectors[index]);
-    }
-
-    return length ? true : false;
-  };
-
-  /**
    * Listen for context change and modify all selectors
    *
    * @method respondToContext
@@ -375,7 +369,7 @@ window.elq = (function (elq, document) {
     window.addEventListener('resize', respondAfterTimeout);
     window.addEventListener('orientationchange', respondAfterTimeout);
 
-    return privateMethods.applyContext();
+    return respond();
   };
 
   /**
@@ -594,14 +588,19 @@ window.elq = (function (elq, document) {
   };
 
   /**
-   * Force elq to respond to current context
+   * Loop through each selector and process matching elements
+   *
+   * Fires an 'elq-change' event if any classes are added or removed by elq.
+   * Custom event contains:
+   *   event.detail.contextHeight
+   *   event.detail.contextWidth
+   *   event.detail.addedClasses
+   *   event.detail.removedClasses
    *
    * @method respond
-   * @return {Boolean} True
+   * @return {Boolean} True if any selectors were found
    */
-  elq.respond = function () {
-    return privateMethods.applyContext();
-  };
+  elq.respond = respond;
 
   /**
    * Adjust how often a resize/orientation event will throttle

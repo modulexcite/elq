@@ -21,7 +21,7 @@ describe('elq', function () {
       expect(
         elq.register('a', 'min-width: 100px', 'tiny')
       ).to.equal('tiny');
-      elq._revealed.applyContext();
+      elq.respond();
       elq.unregister();
       expect(document.querySelectorAll('.tiny')).to.have.length(3);
       document.getElementsByTagName('a')[0].className = '';
@@ -75,6 +75,110 @@ describe('elq', function () {
           );
           done();
         }, 500);
+    });
+
+  });
+
+  describe('.respond()', function () {
+
+    it('should be a function', function () {
+      expect(elq.respond).to.be.a('function');
+    });
+
+    it('should return true if selectors are registered', function (done) {
+      var
+        l = document.createElement('link');
+
+      l.setAttribute('href', 'external3.css');
+      document.head.appendChild(l);
+
+      expect(elq.respond()).to.equal(false);
+      elq._revealed.fetchExternalCSS(l);
+      window.setTimeout(function () {
+        elq._revealed.parseCSS();
+        expect(elq.respond()).to.equal(true);
+        elq._revealed.unfetchExternalCSS(l);
+        document.head.removeChild(l);
+        done();
+      }, 500);
+
+    });
+
+    it('should set initial styles', function (done) {
+      var
+        l = document.createElement('link');
+
+      l.setAttribute('href', 'external3.css');
+      document.head.appendChild(l);
+
+      elq._revealed.fetchExternalCSS(l);
+      window.setTimeout(function () {
+        elq._revealed.parseCSS();
+        elq.respond();
+        expect(
+          getComputedStyle(document.getElementsByTagName('a')[0]).color
+        ).to.equal('rgb(255, 0, 0)');
+        expect(
+          getComputedStyle(document.getElementsByTagName('a')[1]).color
+        ).to.equal('rgb(0, 255, 0)');
+        expect(
+          getComputedStyle(document.getElementsByTagName('a')[2]).color
+        ).to.equal('rgb(0, 0, 255)');
+        elq._revealed.unfetchExternalCSS(l);
+        document.head.removeChild(l);
+        done();
+      }, 500);
+
+    });
+
+    it('should set responded styles', function (done) {
+      var
+        l = document.createElement('link');
+
+      l.setAttribute('href', 'external3.css');
+      document.head.appendChild(l);
+
+      elq._revealed.fetchExternalCSS(l);
+      window.setTimeout(function () {
+        elq._revealed.parseCSS();
+        elq.respond();
+        expect(
+          getComputedStyle(document.getElementsByTagName('a')[0]).color
+        ).to.equal('rgb(255, 0, 0)');
+        expect(
+          getComputedStyle(document.getElementsByTagName('a')[1]).color
+        ).to.equal('rgb(0, 255, 0)');
+        expect(
+          getComputedStyle(document.getElementsByTagName('a')[2]).color
+        ).to.equal('rgb(0, 0, 255)');
+        document.getElementById('container').className = 'w800px';
+        elq.respond();
+        expect(
+          getComputedStyle(document.getElementsByTagName('a')[0]).color
+        ).to.equal('rgb(0, 255, 0)');
+        expect(
+          getComputedStyle(document.getElementsByTagName('a')[1]).color
+        ).to.equal('rgb(0, 0, 255)');
+        expect(
+          getComputedStyle(document.getElementsByTagName('a')[2]).color
+        ).to.equal('rgb(0, 0, 255)');
+        document.getElementById('container').className = 'w400px';
+        elq._revealed.unfetchExternalCSS(l);
+        document.getElementsByTagName('a')[0].className = '';
+        document.getElementsByTagName('a')[1].className = '';
+        document.getElementsByTagName('a')[2].className = '';
+        document.head.removeChild(l);
+        done();
+      }, 500);
+
+    });
+
+  });
+
+  describe('.respondAfter()', function () {
+
+    it('should be a function', function () {
+      expect(elq.respondAfter).to.be.a('function');
     });
 
   });
@@ -218,102 +322,6 @@ describe('elq', function () {
         expect(ls.parentNode).to.equal(null);
 
         document.head.removeChild(l);
-      });
-
-    });
-
-    describe('.applyContext()', function () {
-
-      it('should be a function', function () {
-        expect(elq._revealed.applyContext).to.be.a('function');
-      });
-
-      it('should return true if selectors are registered', function (done) {
-        var
-          l = document.createElement('link');
-
-        l.setAttribute('href', 'external3.css');
-        document.head.appendChild(l);
-
-        expect(elq._revealed.applyContext()).to.equal(false);
-        elq._revealed.fetchExternalCSS(l);
-        window.setTimeout(function () {
-          elq._revealed.parseCSS();
-          expect(elq._revealed.applyContext()).to.equal(true);
-          elq._revealed.unfetchExternalCSS(l);
-          document.head.removeChild(l);
-          done();
-        }, 500);
-
-      });
-
-      it('should set initial styles', function (done) {
-        var
-          l = document.createElement('link');
-
-        l.setAttribute('href', 'external3.css');
-        document.head.appendChild(l);
-
-        elq._revealed.fetchExternalCSS(l);
-        window.setTimeout(function () {
-          elq._revealed.parseCSS();
-          elq._revealed.applyContext();
-          expect(
-            getComputedStyle(document.getElementsByTagName('a')[0]).color
-          ).to.equal('rgb(255, 0, 0)');
-          expect(
-            getComputedStyle(document.getElementsByTagName('a')[1]).color
-          ).to.equal('rgb(0, 255, 0)');
-          expect(
-            getComputedStyle(document.getElementsByTagName('a')[2]).color
-          ).to.equal('rgb(0, 0, 255)');
-          elq._revealed.unfetchExternalCSS(l);
-          document.head.removeChild(l);
-          done();
-        }, 500);
-
-      });
-
-      it('should set responded styles', function (done) {
-        var
-          l = document.createElement('link');
-
-        l.setAttribute('href', 'external3.css');
-        document.head.appendChild(l);
-
-        elq._revealed.fetchExternalCSS(l);
-        window.setTimeout(function () {
-          elq._revealed.parseCSS();
-          elq._revealed.applyContext();
-          expect(
-            getComputedStyle(document.getElementsByTagName('a')[0]).color
-          ).to.equal('rgb(255, 0, 0)');
-          expect(
-            getComputedStyle(document.getElementsByTagName('a')[1]).color
-          ).to.equal('rgb(0, 255, 0)');
-          expect(
-            getComputedStyle(document.getElementsByTagName('a')[2]).color
-          ).to.equal('rgb(0, 0, 255)');
-          document.getElementById('container').className = 'w800px';
-          elq._revealed.applyContext();
-          expect(
-            getComputedStyle(document.getElementsByTagName('a')[0]).color
-          ).to.equal('rgb(0, 255, 0)');
-          expect(
-            getComputedStyle(document.getElementsByTagName('a')[1]).color
-          ).to.equal('rgb(0, 0, 255)');
-          expect(
-            getComputedStyle(document.getElementsByTagName('a')[2]).color
-          ).to.equal('rgb(0, 0, 255)');
-          document.getElementById('container').className = 'w400px';
-          elq._revealed.unfetchExternalCSS(l);
-          document.getElementsByTagName('a')[0].className = '';
-          document.getElementsByTagName('a')[1].className = '';
-          document.getElementsByTagName('a')[2].className = '';
-          document.head.removeChild(l);
-          done();
-        }, 500);
-
       });
 
     });

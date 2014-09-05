@@ -54,8 +54,6 @@
     <div class="bd">
         <ul>
             
-                <li><a href="#methods_applyContext">applyContext</a></li>
-            
                 <li><a href="#methods_fetchExternalCSS">fetchExternalCSS</a></li>
             
                 <li><a href="#methods_mediaToCondition">mediaToCondition</a></li>
@@ -127,35 +125,6 @@
         
             <div id="methods">
             
-                <a name="methods_applyContext"></a>
-<div class="method item private">
-    Boolean <strong class="name"><code>applyContext</code></strong>( <code>  </code> ) <em><code>&#x2F;* private method *&#x2F;</code></em>
-    <br>
-    <span class="foundat">
-    
-        
-    
-        <a href="../../files/src_elq.src.js.html#l230"><code>src&#x2F;elq.src.js:230</code></a>
-    </span><br>
-    <p>Loop through each selector and process matching elements</p>
-<p>Fires an &#39;elq-change&#39; event if any classes are added or removed by elq.
-Custom event contains:
-  event.detail.contextHeight
-  event.detail.contextWidth
-  event.detail.addedClasses
-  event.detail.removedClasses</p>
-
-    
-    
-    
-    <br><div class="returns"><strong>Returns:</strong> &lt;Boolean&gt; <p>True if any selectors were found</p>
-</div>
-    
-    
-    
-</div>
-
-            
                 <a name="methods_fetchExternalCSS"></a>
 <div class="method item private">
     Boolean <strong class="name"><code>fetchExternalCSS</code></strong>( <code>link </code> ) <em><code>&#x2F;* private method *&#x2F;</code></em>
@@ -164,7 +133,7 @@ Custom event contains:
     
         
     
-        <a href="../../files/src_elq.src.js.html#l143"><code>src&#x2F;elq.src.js:143</code></a>
+        <a href="../../files/src_elq.src.js.html#l253"><code>src&#x2F;elq.src.js:253</code></a>
     </span><br>
     <p>Fetch an external CSS link and render it as an inline style element</p>
 
@@ -202,7 +171,7 @@ Custom event contains:
     
         
     
-        <a href="../../files/src_elq.src.js.html#l433"><code>src&#x2F;elq.src.js:433</code></a>
+        <a href="../../files/src_elq.src.js.html#l427"><code>src&#x2F;elq.src.js:427</code></a>
     </span><br>
     <p>Converts the media query portion of an element query into a condition</p>
 
@@ -240,7 +209,7 @@ Custom event contains:
     
         
     
-        <a href="../../files/src_elq.src.js.html#l382"><code>src&#x2F;elq.src.js:382</code></a>
+        <a href="../../files/src_elq.src.js.html#l376"><code>src&#x2F;elq.src.js:376</code></a>
     </span><br>
     <p>Parses all CSS and registers found element queries</p>
 
@@ -263,7 +232,7 @@ Custom event contains:
     
         
     
-        <a href="../../files/src_elq.src.js.html#l570"><code>src&#x2F;elq.src.js:570</code></a>
+        <a href="../../files/src_elq.src.js.html#l564"><code>src&#x2F;elq.src.js:564</code></a>
     </span><br>
     <p>Processes the entire page for element queries</p>
 
@@ -301,7 +270,7 @@ Custom event contains:
     
         
     
-        <a href="../../files/src_elq.src.js.html#l484"><code>src&#x2F;elq.src.js:484</code></a>
+        <a href="../../files/src_elq.src.js.html#l478"><code>src&#x2F;elq.src.js:478</code></a>
     </span><br>
     <p>Registers an element query</p>
 
@@ -359,14 +328,20 @@ Custom event contains:
     
         
     
-        <a href="../../files/src_elq.src.js.html#l597"><code>src&#x2F;elq.src.js:597</code></a>
+        <a href="../../files/src_elq.src.js.html#l591"><code>src&#x2F;elq.src.js:591</code></a>
     </span><br>
-    <p>Force elq to respond to current context</p>
+    <p>Loop through each selector and process matching elements</p>
+<p>Fires an &#39;elq-change&#39; event if any classes are added or removed by elq.
+Custom event contains:
+  event.detail.contextHeight
+  event.detail.contextWidth
+  event.detail.addedClasses
+  event.detail.removedClasses</p>
 
     
     
     
-    <br><div class="returns"><strong>Returns:</strong> &lt;Boolean&gt; <p>True</p>
+    <br><div class="returns"><strong>Returns:</strong> &lt;Boolean&gt; <p>True if any selectors were found</p>
 </div>
     
     
@@ -382,7 +357,7 @@ Custom event contains:
     
         
     
-        <a href="../../files/src_elq.src.js.html#l607"><code>src&#x2F;elq.src.js:607</code></a>
+        <a href="../../files/src_elq.src.js.html#l606"><code>src&#x2F;elq.src.js:606</code></a>
     </span><br>
     <p>Adjust how often a resize/orientation event will throttle</p>
 
@@ -420,7 +395,7 @@ Custom event contains:
     
         
     
-        <a href="../../files/src_elq.src.js.html#l346"><code>src&#x2F;elq.src.js:346</code></a>
+        <a href="../../files/src_elq.src.js.html#l340"><code>src&#x2F;elq.src.js:340</code></a>
     </span><br>
     <p>Listen for context change and modify all selectors</p>
 
@@ -443,7 +418,7 @@ Custom event contains:
     
         
     
-        <a href="../../files/src_elq.src.js.html#l199"><code>src&#x2F;elq.src.js:199</code></a>
+        <a href="../../files/src_elq.src.js.html#l309"><code>src&#x2F;elq.src.js:309</code></a>
     </span><br>
     <p>Removes generated style and fetched css from internal cache</p>
 
@@ -481,7 +456,7 @@ Custom event contains:
     
         
     
-        <a href="../../files/src_elq.src.js.html#l545"><code>src&#x2F;elq.src.js:545</code></a>
+        <a href="../../files/src_elq.src.js.html#l539"><code>src&#x2F;elq.src.js:539</code></a>
     </span><br>
     <p>Unregisters an element query</p>
 
@@ -592,6 +567,17 @@ characters that break the elqSyntax regular expression ,}) etc.</p>
     <code>remainingLinks</code> &lt;<strong>Number</strong>&gt;<br>
     <span class="foundat"><a href="../../files/src_elq.src.js.html#l43"><code>src&#x2F;elq.src.js:43</code></a></span>
     <p>The number of links remaining to be fetched and rendered locally</p>
+
+    
+</div>
+
+            
+                <a name="props_respond"></a>
+<div class="props item">
+    <code>respond</code> &lt;<strong>Function</strong>&gt;<br>
+    <span class="foundat"><a href="../../files/src_elq.src.js.html#l141"><code>src&#x2F;elq.src.js:141</code></a></span>
+    <p>A function that applies context classes when context changes
+Exposed later as elq.respond</p>
 
     
 </div>
