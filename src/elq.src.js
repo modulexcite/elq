@@ -94,7 +94,7 @@ window.elq = (function (elq, document) {
               '(?:\\s*and\\s*(?:\\([^)]+\\)))*' + //     optional and group
             ')*' +
           '|' +
-            '[^())]+' +
+            '[^()]+' +
           ')' +
         ')' +
       '\\)',                                      //     end pseudo )
