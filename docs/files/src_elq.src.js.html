@@ -533,7 +533,7 @@ window.elq = (function (elq, document) {
       }
     );
     media = media.replace(
-      /\s*(?:(min|max)-)?aspect-ratio\s*:\s*(\d+)\/(\d+)\s*/g,
+      /\s*(?:(min|max)-)?aspect-ratio\s*:\s*([1-9]\d*)\/([1-9]\d*)\s*/g,
       function (unused, mm, w, h) {
         var operator, left, right;
 
