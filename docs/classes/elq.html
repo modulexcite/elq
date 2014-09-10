@@ -54,23 +54,23 @@
     <div class="bd">
         <ul>
             
-                <li><a href="#methods_fetchExternalCSS">fetchExternalCSS</a></li>
+                <li><a href="#methods_expandElementQueries">expandElementQueries</a></li>
+            
+                <li><a href="#methods_fetchLink">fetchLink</a></li>
             
                 <li><a href="#methods_mediaToCondition">mediaToCondition</a></li>
-            
-                <li><a href="#methods_parseCSS">parseCSS</a></li>
             
                 <li><a href="#methods_process">process</a></li>
             
                 <li><a href="#methods_register">register</a></li>
             
+                <li><a href="#methods_removeFetchedLink">removeFetchedLink</a></li>
+            
                 <li><a href="#methods_respond">respond</a></li>
             
-                <li><a href="#methods_respondAfter">respondAfter</a></li>
+                <li><a href="#methods_respondDelay">respondDelay</a></li>
             
                 <li><a href="#methods_respondToContext">respondToContext</a></li>
-            
-                <li><a href="#methods_unfetchExternalCSS">unfetchExternalCSS</a></li>
             
                 <li><a href="#methods_unregister">unregister</a></li>
             
@@ -125,15 +125,38 @@
         
             <div id="methods">
             
-                <a name="methods_fetchExternalCSS"></a>
+                <a name="methods_expandElementQueries"></a>
 <div class="method item private">
-    Boolean <strong class="name"><code>fetchExternalCSS</code></strong>( <code>link </code> ) <em><code>&#x2F;* private method *&#x2F;</code></em>
+    Boolean <strong class="name"><code>expandElementQueries</code></strong>( <code>  </code> ) <em><code>&#x2F;* private method *&#x2F;</code></em>
     <br>
     <span class="foundat">
     
         
     
-        <a href="../../files/src_elq.src.js.html#l253"><code>src&#x2F;elq.src.js:253</code></a>
+        <a href="../../files/src_elq.src.js.html#l383"><code>src&#x2F;elq.src.js:383</code></a>
+    </span><br>
+    <p>Parses all CSS and registers found element queries</p>
+
+    
+    
+    
+    <br><div class="returns"><strong>Returns:</strong> &lt;Boolean&gt; <p>True if any element queries were found</p>
+</div>
+    
+    
+    
+</div>
+
+            
+                <a name="methods_fetchLink"></a>
+<div class="method item private">
+    Boolean <strong class="name"><code>fetchLink</code></strong>( <code>link </code> ) <em><code>&#x2F;* private method *&#x2F;</code></em>
+    <br>
+    <span class="foundat">
+    
+        
+    
+        <a href="../../files/src_elq.src.js.html#l255"><code>src&#x2F;elq.src.js:255</code></a>
     </span><br>
     <p>Fetch an external CSS link and render it as an inline style element</p>
 
@@ -171,7 +194,7 @@
     
         
     
-        <a href="../../files/src_elq.src.js.html#l430"><code>src&#x2F;elq.src.js:430</code></a>
+        <a href="../../files/src_elq.src.js.html#l434"><code>src&#x2F;elq.src.js:434</code></a>
     </span><br>
     <p>Converts the media query portion of an element query into a condition</p>
 
@@ -201,29 +224,6 @@
 </div>
 
             
-                <a name="methods_parseCSS"></a>
-<div class="method item private">
-    Boolean <strong class="name"><code>parseCSS</code></strong>( <code>  </code> ) <em><code>&#x2F;* private method *&#x2F;</code></em>
-    <br>
-    <span class="foundat">
-    
-        
-    
-        <a href="../../files/src_elq.src.js.html#l379"><code>src&#x2F;elq.src.js:379</code></a>
-    </span><br>
-    <p>Parses all CSS and registers found element queries</p>
-
-    
-    
-    
-    <br><div class="returns"><strong>Returns:</strong> &lt;Boolean&gt; <p>True if any element queries were found</p>
-</div>
-    
-    
-    
-</div>
-
-            
                 <a name="methods_process"></a>
 <div class="method item">
     Boolean <strong class="name"><code>process</code></strong>( <code>Option </code> ) 
@@ -232,7 +232,7 @@
     
         
     
-        <a href="../../files/src_elq.src.js.html#l567"><code>src&#x2F;elq.src.js:567</code></a>
+        <a href="../../files/src_elq.src.js.html#l572"><code>src&#x2F;elq.src.js:572</code></a>
     </span><br>
     <p>Processes the entire page for element queries</p>
 
@@ -270,7 +270,7 @@
     
         
     
-        <a href="../../files/src_elq.src.js.html#l481"><code>src&#x2F;elq.src.js:481</code></a>
+        <a href="../../files/src_elq.src.js.html#l483"><code>src&#x2F;elq.src.js:483</code></a>
     </span><br>
     <p>Registers an element query</p>
 
@@ -320,6 +320,44 @@
 </div>
 
             
+                <a name="methods_removeFetchedLink"></a>
+<div class="method item private">
+    Boolean <strong class="name"><code>removeFetchedLink</code></strong>( <code>link </code> ) <em><code>&#x2F;* private method *&#x2F;</code></em>
+    <br>
+    <span class="foundat">
+    
+        
+    
+        <a href="../../files/src_elq.src.js.html#l312"><code>src&#x2F;elq.src.js:312</code></a>
+    </span><br>
+    <p>Removes generated style and fetched css from internal cache</p>
+
+    
+    <strong>Parameters:</strong>
+    <ul class="params">
+    
+        <li>
+        
+            <code>link</code> <strong>&lt;DOM Object&gt;</strong>
+        
+        
+        <p>The link that was fetched</p>
+
+            
+        </li>
+    
+    </ul>
+    
+    
+    
+    <br><div class="returns"><strong>Returns:</strong> &lt;Boolean&gt; <p>True if style was deleted</p>
+</div>
+    
+    
+    
+</div>
+
+            
                 <a name="methods_respond"></a>
 <div class="method item">
     Boolean <strong class="name"><code>respond</code></strong>( <code>  </code> ) 
@@ -328,7 +366,7 @@
     
         
     
-        <a href="../../files/src_elq.src.js.html#l594"><code>src&#x2F;elq.src.js:594</code></a>
+        <a href="../../files/src_elq.src.js.html#l600"><code>src&#x2F;elq.src.js:600</code></a>
     </span><br>
     <p>Loop through each selector and process matching elements</p>
 <p>Fires an &#39;elq-change&#39; event if any classes are added or removed by elq.
@@ -349,15 +387,15 @@ Custom event contains:
 </div>
 
             
-                <a name="methods_respondAfter"></a>
+                <a name="methods_respondDelay"></a>
 <div class="method item">
-    Number <strong class="name"><code>respondAfter</code></strong>( <code>Milliseconds </code> ) 
+    Number <strong class="name"><code>respondDelay</code></strong>( <code>Milliseconds </code> ) 
     <br>
     <span class="foundat">
     
         
     
-        <a href="../../files/src_elq.src.js.html#l609"><code>src&#x2F;elq.src.js:609</code></a>
+        <a href="../../files/src_elq.src.js.html#l615"><code>src&#x2F;elq.src.js:615</code></a>
     </span><br>
     <p>Adjust how often a resize/orientation event will throttle</p>
 
@@ -395,7 +433,7 @@ Custom event contains:
     
         
     
-        <a href="../../files/src_elq.src.js.html#l340"><code>src&#x2F;elq.src.js:340</code></a>
+        <a href="../../files/src_elq.src.js.html#l343"><code>src&#x2F;elq.src.js:343</code></a>
     </span><br>
     <p>Listen for context change and modify all selectors</p>
 
@@ -403,44 +441,6 @@ Custom event contains:
     
     
     <br><div class="returns"><strong>Returns:</strong> &lt;Boolean&gt; <p>True if any selectors were found</p>
-</div>
-    
-    
-    
-</div>
-
-            
-                <a name="methods_unfetchExternalCSS"></a>
-<div class="method item private">
-    Boolean <strong class="name"><code>unfetchExternalCSS</code></strong>( <code>link </code> ) <em><code>&#x2F;* private method *&#x2F;</code></em>
-    <br>
-    <span class="foundat">
-    
-        
-    
-        <a href="../../files/src_elq.src.js.html#l309"><code>src&#x2F;elq.src.js:309</code></a>
-    </span><br>
-    <p>Removes generated style and fetched css from internal cache</p>
-
-    
-    <strong>Parameters:</strong>
-    <ul class="params">
-    
-        <li>
-        
-            <code>link</code> <strong>&lt;DOM Object&gt;</strong>
-        
-        
-        <p>The link that was fetched</p>
-
-            
-        </li>
-    
-    </ul>
-    
-    
-    
-    <br><div class="returns"><strong>Returns:</strong> &lt;Boolean&gt; <p>True if style was deleted</p>
 </div>
     
     
@@ -456,7 +456,7 @@ Custom event contains:
     
         
     
-        <a href="../../files/src_elq.src.js.html#l542"><code>src&#x2F;elq.src.js:542</code></a>
+        <a href="../../files/src_elq.src.js.html#l547"><code>src&#x2F;elq.src.js:547</code></a>
     </span><br>
     <p>Unregisters an element query</p>
 
@@ -501,9 +501,40 @@ Custom event contains:
         
             <div id="props">
             
-                <a name="props_cachedLinks"></a>
+                <a name="props__private"></a>
 <div class="props item">
-    <code>cachedLinks</code> &lt;<strong>Object</strong>&gt;<br>
+    <code>_private</code> &lt;<strong>Object</strong>&gt;<br>
+    <span class="foundat"><a href="../../files/src_elq.src.js.html#l132"><code>src&#x2F;elq.src.js:132</code></a></span>
+    <p>An object to store private methods</p>
+
+    
+</div>
+
+            
+                <a name="props_contextFunctions"></a>
+<div class="props item">
+    <code>contextFunctions</code> &lt;<strong>Object</strong>&gt;<br>
+    <span class="foundat"><a href="../../files/src_elq.src.js.html#l63"><code>src&#x2F;elq.src.js:63</code></a></span>
+    <p>functions that apply classes based on registered element queries
+contextFunctions[selector][media]</p>
+
+    
+</div>
+
+            
+                <a name="props_elementQuery"></a>
+<div class="props item">
+    <code>elementQuery</code> &lt;<strong>Regexp Object</strong>&gt;<br>
+    <span class="foundat"><a href="../../files/src_elq.src.js.html#l74"><code>src&#x2F;elq.src.js:74</code></a></span>
+    <p>A regular expression for finding valid element queries</p>
+
+    
+</div>
+
+            
+                <a name="props_linkCache"></a>
+<div class="props item">
+    <code>linkCache</code> &lt;<strong>Object</strong>&gt;<br>
     <span class="foundat"><a href="../../files/src_elq.src.js.html#l53"><code>src&#x2F;elq.src.js:53</code></a></span>
     <p>A hash of cached links to avoid re-fetching</p>
 
@@ -511,62 +542,22 @@ Custom event contains:
 </div>
 
             
-                <a name="props_cssString"></a>
+                <a name="props_quotedText"></a>
 <div class="props item">
-    <code>cssString</code> &lt;<strong>Regexp Object</strong>&gt;<br>
-    <span class="foundat"><a href="../../files/src_elq.src.js.html#l104"><code>src&#x2F;elq.src.js:104</code></a></span>
+    <code>quotedText</code> &lt;<strong>Regexp Object</strong>&gt;<br>
+    <span class="foundat"><a href="../../files/src_elq.src.js.html#l105"><code>src&#x2F;elq.src.js:105</code></a></span>
     <p>A regular expression for temporarily replacing strings that may contain
-characters that break the elqSyntax regular expression ,}) etc.</p>
+characters that break the elementQuery regular expression ,}) etc.</p>
 
     
 </div>
 
             
-                <a name="props_elqSyntax"></a>
+                <a name="props_rempx"></a>
 <div class="props item">
-    <code>elqSyntax</code> &lt;<strong>Regexp Object</strong>&gt;<br>
-    <span class="foundat"><a href="../../files/src_elq.src.js.html#l73"><code>src&#x2F;elq.src.js:73</code></a></span>
-    <p>A regular expression for finding valid element queries</p>
-
-    
-</div>
-
-            
-                <a name="props_pixelsPerREM"></a>
-<div class="props item">
-    <code>pixelsPerREM</code> &lt;<strong>Number</strong>&gt;<br>
-    <span class="foundat"><a href="../../files/src_elq.src.js.html#l121"><code>src&#x2F;elq.src.js:121</code></a></span>
+    <code>rempx</code> &lt;<strong>Number</strong>&gt;<br>
+    <span class="foundat"><a href="../../files/src_elq.src.js.html#l122"><code>src&#x2F;elq.src.js:122</code></a></span>
     <p>The number of pixels corresponding to one rem at context change time</p>
-
-    
-</div>
-
-            
-                <a name="props_privateMethods"></a>
-<div class="props item">
-    <code>privateMethods</code> &lt;<strong>Object</strong>&gt;<br>
-    <span class="foundat"><a href="../../files/src_elq.src.js.html#l131"><code>src&#x2F;elq.src.js:131</code></a></span>
-    <p>An object to store private methods</p>
-
-    
-</div>
-
-            
-                <a name="props_registeredSelectors"></a>
-<div class="props item">
-    <code>registeredSelectors</code> &lt;<strong>Object</strong>&gt;<br>
-    <span class="foundat"><a href="../../files/src_elq.src.js.html#l63"><code>src&#x2F;elq.src.js:63</code></a></span>
-    <p>A hash of registered media queries to avoid duplication</p>
-
-    
-</div>
-
-            
-                <a name="props_remainingLinks"></a>
-<div class="props item">
-    <code>remainingLinks</code> &lt;<strong>Number</strong>&gt;<br>
-    <span class="foundat"><a href="../../files/src_elq.src.js.html#l43"><code>src&#x2F;elq.src.js:43</code></a></span>
-    <p>The number of links remaining to be fetched and rendered locally</p>
 
     
 </div>
@@ -575,7 +566,7 @@ characters that break the elqSyntax regular expression ,}) etc.</p>
                 <a name="props_respond"></a>
 <div class="props item">
     <code>respond</code> &lt;<strong>Function</strong>&gt;<br>
-    <span class="foundat"><a href="../../files/src_elq.src.js.html#l141"><code>src&#x2F;elq.src.js:141</code></a></span>
+    <span class="foundat"><a href="../../files/src_elq.src.js.html#l142"><code>src&#x2F;elq.src.js:142</code></a></span>
     <p>A function that applies context classes when context changes
 Exposed later as elq.respond</p>
 
@@ -583,9 +574,9 @@ Exposed later as elq.respond</p>
 </div>
 
             
-                <a name="props_respondAfter"></a>
+                <a name="props_respondDelay"></a>
 <div class="props item">
-    <code>respondAfter</code> &lt;<strong>Number</strong>&gt;<br>
+    <code>respondDelay</code> &lt;<strong>Number</strong>&gt;<br>
     <span class="foundat"><a href="../../files/src_elq.src.js.html#l33"><code>src&#x2F;elq.src.js:33</code></a></span>
     <p>Default value for milliseconds after a resize/orientation to respond</p>
 
@@ -598,6 +589,16 @@ Exposed later as elq.respond</p>
     <code>respondTimeout</code> &lt;<strong>Object</strong>&gt;<br>
     <span class="foundat"><a href="../../files/src_elq.src.js.html#l23"><code>src&#x2F;elq.src.js:23</code></a></span>
     <p>Allows pre-processing after a window resize with less resources</p>
+
+    
+</div>
+
+            
+                <a name="props_unfetchedLinks"></a>
+<div class="props item">
+    <code>unfetchedLinks</code> &lt;<strong>Number</strong>&gt;<br>
+    <span class="foundat"><a href="../../files/src_elq.src.js.html#l43"><code>src&#x2F;elq.src.js:43</code></a></span>
+    <p>The number of links remaining to be fetched and rendered locally</p>
 
     
 </div>

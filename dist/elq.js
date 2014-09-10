@@ -33,51 +33,52 @@ window.elq = (function (elq, document) {
     /**
      * Default value for milliseconds after a resize/orientation to respond
      *
-     * @property respondAfter
+     * @property respondDelay
      * @private
      * @type Number
      * @default 100
      */
-    respondAfter = 100,
+    respondDelay = 100,
 
     /**
      * The number of links remaining to be fetched and rendered locally
      *
-     * @property remainingLinks
+     * @property unfetchedLinks
      * @private
      * @type Number
      * @default 0
      */
-    remainingLinks = 0,
+    unfetchedLinks = 0,
 
     /**
      * A hash of cached links to avoid re-fetching
      *
-     * @property cachedLinks
+     * @property linkCache
      * @private
      * @type Object
      * @default {}
      */
-    cachedLinks = {},
+    linkCache = {},
 
     /**
-     * A hash of registered media queries to avoid duplication
+     * functions that apply classes based on registered element queries
+     * contextFunctions[selector][media]
      *
-     * @property registeredSelectors
+     * @property contextFunctions
      * @private
      * @type Object
      * @default {}
      */
-    registeredSelectors = {},
+    contextFunctions = {},
 
     /**
      * A regular expression for finding valid element queries
      *
-     * @property elqSyntax
+     * @property elementQuery
      * @private
      * @type Regexp Object
      */
-    elqSyntax = new RegExp(
+    elementQuery = new RegExp(
       '\\s*([^,}]+)' +                            // $1: selector
       '\\:media\\(' +                             //     pseudo :media(
         '(' +                                     // $2: media query
@@ -103,13 +104,13 @@ window.elq = (function (elq, document) {
 
     /**
      * A regular expression for temporarily replacing strings that may contain
-     * characters that break the elqSyntax regular expression ,}) etc.
+     * characters that break the elementQuery regular expression ,}) etc.
      *
-     * @property cssString
+     * @property quotedText
      * @private
      * @type Regexp Object
      */
-    cssString = new RegExp(
+    quotedText = new RegExp(
       '([^\\\\])' +    // $1: non-escaped starting delimiter
       '([\'"])' +      // $2: delimiter
       '(.*?[^\\\\])' + // $3: string contents
@@ -121,22 +122,22 @@ window.elq = (function (elq, document) {
     /**
      * The number of pixels corresponding to one rem at context change time
      *
-     * @property pixelsPerREM
+     * @property rempx
      * @private
      * @type Number
      * @default undefined
      */
-    pixelsPerREM,
+    rempx,
 
     /**
      * An object to store private methods
      *
-     * @property privateMethods
+     * @property _private
      * @private
      * @type Object
      * @default {}
      */
-    privateMethods = {},
+    _private = {},
 
     /**
      * A function that applies context classes when context changes
@@ -148,116 +149,117 @@ window.elq = (function (elq, document) {
      */
     respond = function () {
       var
-        selectors = Object.keys(registeredSelectors),
-        length    = selectors.length,
-        index,
-        processElements,
-        processContexts;
+        selectors = Object.keys(contextFunctions),
+        len       = selectors.length,
+        i,
+        findContexts,
+        processContext;
 
-      processContexts = function (
+      processContext = function (
         selector,
-        pixelsPerEM,
+        empx,
         element,
-        parentWidth,
-        parentHeight
+        contextWidth,
+        contextHeight
       ) {
         var
-          registeredSelector = registeredSelectors[selector],
-          conditions         = Object.keys(registeredSelector),
-          length             = conditions.length,
-          added              = [],
-          removed            = [],
-          changed,
-          index;
+          contextFunction = contextFunctions[selector],
+          conditions      = Object.keys(contextFunction),
+          len             = conditions.length,
+          addedClasses    = [],
+          removedClasses  = [],
+          changes,
+          elqChangeEvent,
+          i;
 
-        for (index = 0; index < length; index += 1) {
-
-          changed = registeredSelector[conditions[index]](
-            parentWidth,
-            parentHeight,
+        for (i = 0; i < len; i ++) {
+          changes = contextFunction[conditions[i]](
+            contextWidth,
+            contextHeight,
             element,
-            pixelsPerEM,
-            pixelsPerREM
+            empx,
+            rempx
           );
 
-          added = added.concat(changed.added);
-          removed = removed.concat(changed.removed);
-
+          addedClasses = addedClasses.concat(changes.added);
+          removedClasses = removedClasses.concat(changes.added);
         }
 
-        if (added.length || removed.length) {
-          var event = document.createEvent('CustomEvent');
-          event.initCustomEvent(
+        if (addedClasses.length || removedClasses.length) {
+          elqChangeEvent = document.createEvent('CustomEvent');
+
+          elqChangeEvent.initCustomEvent(
             'elq-change',
             true,
             true,
             {
-              'addedClasses': added,
-              'removedClasses': removed,
-              'contextWidth': parentWidth,
-              'contextHeight': parentHeight
+              'addedClasses':   addedClasses,
+              'removedClasses': removedClasses,
+              'contextWidth':   contextWidth,
+              'contextHeight':  contextHeight
             }
           );
-          element.dispatchEvent(event);
+
+          element.dispatchEvent(elqChangeEvent);
         }
       };
 
-      processElements = function (selector) {
+      findContexts = function (selector) {
         var
           elements = document.querySelectorAll(selector),
-          length = elements.length,
-          index,
+          len      = elements.length,
+          i,
           element,
-          parent,
-          pixelsPerEM,
-          parentWidth,
-          parentHeight;
+          context,
+          empx,
+          contextWidth,
+          contextHeight;
 
-        for (index = 0; index < length; index += 1) {
-          element     = elements[index];
-          parent      = element.parentNode;
-          pixelsPerEM = document.defaultView.getComputedStyle(
-            parent,
+        for (i = 0; i < len; i ++) {
+          element = elements[i];
+          context = element.parentNode;
+          empx    = document.defaultView.getComputedStyle(
+            context,
             null
           ).getPropertyValue('fontSize');
 
-          parentWidth = parent.clientWidth +
-            (2 * (parseInt(parent.style.padding, 10) || 0)) + // padding
-            (parseInt(parent.style.paddingLeft, 10) || 0) +   // paddingLeft
-            (parseInt(parent.style.paddingRight, 10) || 0);   // paddingRight
+          contextWidth = context.clientWidth +
+            (2 * (parseInt(context.style.padding, 10) || 0)) + // padding
+            (parseInt(context.style.paddingLeft, 10) || 0) +   // left
+            (parseInt(context.style.paddingRight, 10) || 0);   // right
 
-          parentHeight = parent.clientHeight +
-            (2 * (parseInt(parent.style.padding, 10) || 0)) + // padding
-            (parseInt(parent.style.paddingTop, 10) || 0) +    // paddingTop
-            (parseInt(parent.style.paddingBottom, 10) || 0);  // paddingBottom
+          contextHeight = context.clientHeight +
+            (2 * (parseInt(context.style.padding, 10) || 0)) + // padding
+            (parseInt(context.style.paddingTop, 10) || 0) +    // top
+            (parseInt(context.style.paddingBottom, 10) || 0);  // bottom
 
-          processContexts(
+          processContext(
             selector,
-            pixelsPerEM,
+            empx,
             element,
-            parentWidth,
-            parentHeight
+            contextWidth,
+            contextHeight
           );
         }
       };
 
-      for (index = 0; index < length; index += 1) {
-        processElements(selectors[index]);
+      for (i = 0; i < len; i ++) {
+        findContexts(selectors[i]);
       }
 
-      return length ? true : false;
+      return len ? true : false;
     };
 
 
   /**
    * Fetch an external CSS link and render it as an inline style element
    *
-   * @method fetchExternalCSS
+   * @method fetchLink
    * @private
    * @param  {DOM Object} link The link to fetch
    * @return {Boolean}         True if link was fetched
    */
-  privateMethods.fetchExternalCSS = function (link) {
+  _private.fetchLink = function (link) {
     var
       success = false,
       href    = link.getAttribute('href'),
@@ -265,7 +267,7 @@ window.elq = (function (elq, document) {
       style,
       request;
 
-    if (!cachedLinks[href + media]) {
+    if (!linkCache[href + media]) {
       success = true;
       style   = document.createElement('style');
       request = new XMLHttpRequest();
@@ -278,20 +280,21 @@ window.elq = (function (elq, document) {
       style.className = 'elq-fetched';
 
       link.parentNode.insertBefore(style, link.nextSibling);
-      cachedLinks[href + media] = true;
+      linkCache[href + media] = true;
 
       request.onreadystatechange = function () {
         if (request.readyState === 4) {
+
           if (request.status === 200) {
             style.innerHTML += request.responseText;
           } else {
-            privateMethods.unfetchExternalCSS(link);
+            _private.removeFetchedLink(link);
           }
 
-          remainingLinks -= 1;
+          unfetchedLinks -= 1;
 
-          if (!remainingLinks) {
-            privateMethods.parseCSS();
+          if (!unfetchedLinks) {
+            _private.expandElementQueries();
           }
         }
       };
@@ -299,7 +302,7 @@ window.elq = (function (elq, document) {
       request.open('GET', href, true);
       request.send();
     } else {
-      remainingLinks -= 1;
+      unfetchedLinks -= 1;
     }
 
     return success;
@@ -308,12 +311,12 @@ window.elq = (function (elq, document) {
   /**
    * Removes generated style and fetched css from internal cache
    *
-   * @method unfetchExternalCSS
+   * @method removeFetchedLink
    * @private
    * @param  {DOM Object} link The link that was fetched
    * @return {Boolean}         True if style was deleted
    */
-  privateMethods.unfetchExternalCSS = function(link) {
+  _private.removeFetchedLink = function(link) {
     var
       success = false,
       href    = link.getAttribute('href'),
@@ -323,13 +326,13 @@ window.elq = (function (elq, document) {
     if (
       style &&
       (style.tagName.toLowerCase() === 'style') &&
-      (style.getAttribute('href') === href) &&
+      (style.getAttribute('href')  === href) &&
       (style.getAttribute('media') === media) &&
-      (style.className === 'elq-fetched')
+      (style.className             === 'elq-fetched')
     ) {
       media = media || '';
       style.parentNode.removeChild(style);
-      delete(cachedLinks[href + media]);
+      delete(linkCache[href + media]);
       success = true;
     }
 
@@ -343,34 +346,35 @@ window.elq = (function (elq, document) {
    * @private
    * @return {Boolean} True if any selectors were found
    */
-  privateMethods.respondToContext = function () {
-    var
-      respondAfterTimeout = function respondAfterTimeout() {
-        var
-          lastClientWidth = document.lastClientWidth || 0,
-          lastClientHeight = document.lastClientHeight || 0;
+  _private.respondToContext = function () {
+    var checkContext;
 
-        if (document.clientWidth !== lastClientWidth ||
-          document.clientHeight !== lastClientHeight) {
-          clearTimeout(respondTimeout);
-          respondTimeout = setTimeout(
-            privateMethods.respondToContext,
-            respondAfter
-          );
-          document.lastClientWidth = document.clientWidth;
-          document.lastClientHeight = document.clientHeight;
-        }
-      };
+    checkContext = function () {
+      var
+        lastWidth  = document.lastWidth || 0,
+        lastHeight = document.lastHeight || 0;
 
-    pixelsPerREM = document.defaultView.getComputedStyle(
+      if (document.clientWidth !== lastWidth ||
+        document.clientHeight  !== lastHeight) {
+        clearTimeout(respondTimeout);
+        respondTimeout = setTimeout(
+          _private.respondToContext,
+          respondDelay
+        );
+        document.lastWidth  = document.clientWidth;
+        document.lastHeight = document.clientHeight;
+      }
+    };
+
+    rempx = document.defaultView.getComputedStyle(
       document.querySelector('html'),
       null
     ).getPropertyValue('fontSize');
 
-    window.removeEventListener('resize', respondAfterTimeout);
-    window.removeEventListener('orientationchange', respondAfterTimeout);
-    window.addEventListener('resize', respondAfterTimeout);
-    window.addEventListener('orientationchange', respondAfterTimeout);
+    window.removeEventListener('resize', checkContext);
+    window.removeEventListener('orientationchange', checkContext);
+    window.addEventListener('resize', checkContext);
+    window.addEventListener('orientationchange', checkContext);
 
     return respond();
   };
@@ -378,42 +382,42 @@ window.elq = (function (elq, document) {
   /**
    * Parses all CSS and registers found element queries
    *
-   * @method parseCSS
+   * @method expandElementQueries
    * @private
    * @return {Boolean} True if any element queries were found
    */
-  privateMethods.parseCSS = function () {
+  _private.expandElementQueries = function () {
     var
-      success = false,
-      styles  = document.querySelectorAll('style'),
-      length  = styles.length,
-      index,
+      i,
       style,
       css,
+      success = false,
+      styles  = document.querySelectorAll('style'),
+      len     = styles.length,
       strings = [],
       replaceCSS = function (unused, selector, media) {
         return selector + '.' + elq.register(selector, media);
       },
-      replaceStrings = function (unused, beforeDelimiter, delimiter, string) {
+      replaceStrings = function (unused, nonEscape, delimiter, string) {
         strings.push(delimiter + string + delimiter);
-        return (beforeDelimiter + '-=STRING=-');
+        return (nonEscape + '-=STRING=-');
       },
       restoreStrings = function (unused) {
         var restored = strings.shift();
         return restored;
       };
 
-    for (index = 0; index < length; index += 1) {
-      style = styles[index];
+    for (i = 0; i < len; i ++) {
+      style = styles[i];
 
       css = style.innerHTML;
+      css = css.replace(quotedText, replaceStrings);
       css = css.replace(/\s+/g, ' ');
       css = css.replace(/(^|\})\s*/g, '$1\n');
-      css = css.replace(cssString, replaceStrings);
 
-      while (elqSyntax.test(css)) {
+      while (elementQuery.test(css)) {
         success = true;
-        css = css.replace(elqSyntax, replaceCSS);
+        css     = css.replace(elementQuery, replaceCSS);
       }
 
       css = css.replace(/-=STRING=-/g, restoreStrings);
@@ -421,7 +425,7 @@ window.elq = (function (elq, document) {
       style.innerHTML = css;
     }
 
-    privateMethods.respondToContext();
+    _private.respondToContext();
 
     return success;
   };
@@ -434,24 +438,23 @@ window.elq = (function (elq, document) {
    * @param  {String} media The media query portion of the element query
    * @return {String}       The modified condition
    */
-  privateMethods.mediaToCondition = function (media) {
+  _private.mediaToCondition = function (media) {
     media = '(' + media + ')';
     media = media.replace(/\s*,\s*/g, ')||(');
     media = media.replace(/\s*not\s*([^|]+)\s*/g, '!($1)');
     media = media.replace(/\s+and\s+/g, '&&');
     media = media.replace(
       /\s*(?:(min|max)-)?(width|height)\s*:\s*(\d+)(px|em|rem)\s*/g,
-      function (unused, mm, hw, val, units) {
-        var operator, left, right;
-
-        operator = mm === 'min' ? '>=' : mm === 'max' ? '<=' : '==';
-        left = hw === 'width' ? 'elw' : 'elh';
-        right = val;
+      function (unused, minMax, heightWidth, value, units) {
+        var
+          operator = minMax === 'min' ? '>=' : minMax === 'max' ? '<=' : '==',
+          left = heightWidth === 'width' ? 'contextWidth' : 'contextHeight',
+          right = value;
 
         if (units === 'em') {
-          left = '(' + left + '/pxpem)';
+          left = '(' + left + '/empx)';
         } else if (units === 'rem') {
-          left = '(' + left + '/pxprem)';
+          left = '(' + left + '/rempx)';
         }
 
         return left + operator + right;
@@ -459,12 +462,11 @@ window.elq = (function (elq, document) {
     );
     media = media.replace(
       /\s*(?:(min|max)-)?aspect-ratio\s*:\s*([1-9]\d*)\/([1-9]\d*)\s*/g,
-      function (unused, mm, w, h) {
-        var operator, left, right;
-
-        operator = mm === 'min' ? '>=' : mm === 'max' ? '<=' : '==';
-        left = '(elw/elh)';
-        right = '(' + w + '/' + h + ')';
+      function (unused, minMax, aspextX, aspectY) {
+        var
+          operator = minMax === 'min' ? '>=' : minMax === 'max' ? '<=' : '==',
+          left = '(contextWidth/contextHeight)',
+          right = '(' + aspextX + '/' + aspectY + ')';
 
         return left + operator + right;
       }
@@ -498,42 +500,45 @@ window.elq = (function (elq, document) {
           }
         );
       }
-      if (!registeredSelectors[selector]) {
-        registeredSelectors[selector] = {};
+      if (!contextFunctions[selector]) {
+        contextFunctions[selector] = {};
       }
-      registeredSelectors[selector][media] =
+      contextFunctions[selector][media] =
         new Function( // jshint ignore:line
-          'elw', 'elh', 'el', 'pxpem', 'pxprem', // params
+          // params
+          'contextWidth', 'contextHeight', 'element', 'empx', 'rempx',
+
+          // function
           'var ' +
-            'changed = { added: [], removed: [] },' +
-            'classes = el.className.split(/\\s+/),' +
+            'changes = { added: [], removed: [] },' +
+            'classes = element.className.split(/\\s+/),' +
             'exists,' +
             'i,' +
             'len = classes.length;' +
-          'for (i = 0; i < len; i += 1) {' +
+          'for (i = 0; i < len; i ++) {' +
             'if (classes[i] === \'' + elqClass + '\') {' +
               'exists = i + 1;' +
             '}' +
           '}' +
-          'if (' + privateMethods.mediaToCondition(media) + ') {' +
+          'if (' + _private.mediaToCondition(media) + ') {' +
             'if (!exists) {' +
               'classes.push(\'' + elqClass + '\');' +
-              'changed.added.push(\'' + elqClass + '\');' +
+              'changes.added.push(\'' + elqClass + '\');' +
             '}' +
           '} else {' +
             'if (exists) {' +
               'classes.splice(exists - 1, 1);' +
-              'changed.removed.push(\'' + elqClass + '\');' +
+              'changes.removed.push(\'' + elqClass + '\');' +
             '}' +
           '}' +
-          'if (changed.added.length || changed.removed.length) {' +
-            'el.className = classes.join(\' \');' +
+          'if (changes.added.length || changes.removed.length) {' +
+            'element.className = classes.join(\' \');' +
           '}' +
-          'return changed;'
+          'return changes;'
         );
     }
 
-    privateMethods.respondToContext();
+    _private.respondToContext();
 
     return elqClass;
   };
@@ -551,13 +556,13 @@ window.elq = (function (elq, document) {
       success = false;
 
     if (selector && media) {
-      success = registeredSelectors[selector][media] ? true : false;
-      delete(registeredSelectors[selector][media]);
+      success = contextFunctions[selector][media] ? true : false;
+      delete(contextFunctions[selector][media]);
     } else {
-      success = Object.keys(registeredSelectors).length ?
+      success = Object.keys(contextFunctions).length ?
         true :
         false;
-      registeredSelectors = {};
+      contextFunctions = {};
     }
 
     return success;
@@ -572,18 +577,19 @@ window.elq = (function (elq, document) {
    */
   elq.process = function (links) {
     var
-      length,
-      index;
+      i,
+      len;
 
-    links          = links || document.querySelectorAll('link[href*=".css"]');
-    length         = links.length;
-    remainingLinks = length;
+    links = links || document.querySelectorAll('link[href*=".css"]');
+    len   = links.length;
 
-    if (!length) {
-      privateMethods.parseCSS();
+    unfetchedLinks = len;
+
+    if (!len) {
+      _private.expandElementQueries();
     } else {
-      for (index = 0; index < length; index += 1) {
-        privateMethods.fetchExternalCSS(links[index]);
+      for (i = 0; i < len; i ++) {
+        _private.fetchLink(links[i]);
       }
     }
 
@@ -608,12 +614,12 @@ window.elq = (function (elq, document) {
   /**
    * Adjust how often a resize/orientation event will throttle
    *
-   * @method respondAfter
+   * @method respondDelay
    * @param  {Number} Milliseconds after which to render
    * @return {Number} Milliseconds after which to render
    */
-  elq.respondAfter = function (milliseconds) {
-    return respondAfter = +milliseconds >= 0 ? milliseconds : respondAfter;
+  elq.delay = function (milliseconds) {
+    return respondDelay = +milliseconds >= 0 ? milliseconds : respondDelay;
   };
 
   return elq;
